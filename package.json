@@ -7,10 +7,10 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "format:fix": "eslint src --config=./.eslintrc.json --fix --no-error-on-unmatched-pattern",
+    "format:fix": "eslint src --config=.eslintrc.json --fix --no-error-on-unmatched-pattern",
     "pretty-fix": "npx prettier src --write",
     "preview": "vite preview",
-    "prepare": "cd .. && husky install react-course/.husky"
+    "prepare": "husky install"
   },
   "dependencies": {
     "react": "^18.2.0",
