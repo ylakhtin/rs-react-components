@@ -2,7 +2,7 @@ function App() {
 
   return (
     console.log('fff') ,
-    <div>bla
+    <div>bla   
     </div>
   )
 }
