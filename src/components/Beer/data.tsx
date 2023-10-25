@@ -3,7 +3,7 @@ const DEFAULT_PAGE: number = 1;
 const ROOT_ENDPOINT: string = 'https://api.punkapi.com/v2/';
 const INITIAL_ENDPOINT: string = `beers?page=${DEFAULT_PAGE}&per_page=${BEERS_PER_PAGE}`;
 
-interface IBeerDetails {
+export interface IBeerDetails {
   id: number;
   name: string;
   tagline: string;
@@ -27,5 +27,36 @@ interface IBeerDetails {
   contributed_by: string;
 }
 
-export { BEERS_PER_PAGE, DEFAULT_PAGE, ROOT_ENDPOINT, INITIAL_ENDPOINT };
-export type { IBeerDetails };
+const EMPTY_ITEMS_ARRAY: IBeerDetails[] = [
+  {
+    id: 0,
+    name: '',
+    tagline: '',
+    first_brewed: '',
+    description: '',
+    image_url: '',
+    abv: 0,
+    ibu: 0,
+    target_fg: 0,
+    target_og: 0,
+    ebc: 0,
+    srm: 0,
+    ph: 0,
+    attenuation_level: 0,
+    volume: {},
+    boil_volume: {},
+    method: {},
+    ingredients: {},
+    food_pairing: [''],
+    brewers_tips: '',
+    contributed_by: '',
+  },
+];
+
+export {
+  BEERS_PER_PAGE,
+  DEFAULT_PAGE,
+  ROOT_ENDPOINT,
+  INITIAL_ENDPOINT,
+  EMPTY_ITEMS_ARRAY,
+};

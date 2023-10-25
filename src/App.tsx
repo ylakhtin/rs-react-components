@@ -1,6 +1,7 @@
 import React from 'react';
 import SearchButton from './components/SearchButton/SearchButton';
 import SearchInput from './components/SearchInput/SearchInput';
+import Beer from './components/Beer/Beer';
 
 class App extends React.Component {
   render(): React.ReactNode {
@@ -10,7 +11,9 @@ class App extends React.Component {
           <SearchInput />
           <SearchButton />
         </section>
-        <section className="box"></section>
+        <section className="box">
+          <Beer />
+        </section>
       </div>
     );
   }
