@@ -22,6 +22,7 @@ class Beer extends React.Component<number, { beerList: IBeerDetails[] }> {
         method: 'GET',
       });
       responseJSON = await responsePromise.json();
+      console.log(responseJSON);
       if (Array.isArray(responseJSON)) {
         this.setState({ beerList: responseJSON });
       }
@@ -35,8 +36,25 @@ class Beer extends React.Component<number, { beerList: IBeerDetails[] }> {
   render(): React.ReactNode {
     return (
       <div>
-        <div>{this.state.beerList[0].id}</div>
-        <div>{this.state.beerList[0].name}</div>
+        {this.state.beerList.map((beer, index) => (
+          <div className="flex-container" key={index}>
+            <div className="image-container">
+              <img
+                className="item-image"
+                key={index}
+                src={beer.image_url}
+                alt={beer.name}
+              />
+            </div>
+            <div className="data-container">
+              <div>{beer.name}</div>
+              <div>{beer.tagline}</div>
+              <div>Volume: {beer.abv}%</div>
+              <div>{beer.description}</div>
+              <div>First brewed: {beer.first_brewed}</div>
+            </div>
+          </div>
+        ))}
         <button onClick={this.setInitialItemList}>Init</button>
       </div>
     );

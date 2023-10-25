@@ -37,3 +37,28 @@ input[type=text]:focus {
 .search-button:hover {
   opacity: 0.7;
 }
+
+/* Bottom block styles */
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid teal;
+  padding: 0.5rem;
+}
+
+.image-container {
+  min-width: 6rem;
+  text-align: center;
+}
+
+.item-image {
+  max-width: 5rem;
+  max-height: 10rem;
+}
+
+.data-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
