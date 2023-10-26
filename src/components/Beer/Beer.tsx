@@ -7,23 +7,27 @@ import {
 } from './data';
 import { IBeerDetails } from './data';
 
+type PropsType = { searchString: string | null };
+
 class Beer extends React.PureComponent<
-  { searchString: string | null },
+  PropsType,
   { beerList: IBeerDetails[] }
 > {
-  constructor(
-    props:
-      | { searchString: string | null }
-      | Readonly<{ searchString: string | null }>
-  ) {
+  constructor(props: PropsType) {
     super(props);
 
     this.state = {
       beerList: EMPTY_ITEMS_ARRAY,
     };
+
+    this.queryData = this.queryData.bind(this);
   }
 
-  async componentDidMount(): Promise<void> {
+  componentDidMount(): void {
+    this.queryData();
+  }
+
+  async queryData(): Promise<void> {
     let queryString: string;
     if (this.props.searchString) {
       queryString =
@@ -46,6 +50,13 @@ class Beer extends React.PureComponent<
       responseJSON = new Error(
         'Cannot reach out to server. Please, check your network connection and server availability.'
       );
+    }
+  }
+
+  componentDidUpdate(prevProps: PropsType) {
+    console.log('search string is changed');
+    if (this.props.searchString !== prevProps.searchString) {
+      this.queryData();
     }
   }
 

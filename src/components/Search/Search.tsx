@@ -1,8 +1,12 @@
 import React from 'react';
 import { SEARCH_DEFAULT } from '../../data';
 
-class Search extends React.Component<object, { inputValue: string }> {
-  constructor(props: object) {
+type SearchString = {
+  changeSearchString: (newSearchString: string) => void;
+};
+
+class Search extends React.Component<SearchString, { inputValue: string }> {
+  constructor(props: SearchString) {
     super(props);
     this.state = {
       inputValue: '',
@@ -13,13 +17,14 @@ class Search extends React.Component<object, { inputValue: string }> {
   }
 
   setInputValue(searchString: string): void {
-    console.log('set input value is called');
     this.setState({ inputValue: searchString });
-    console.log('current state is - ', this.state.inputValue);
   }
 
   setSearchString(): void {
     localStorage.setItem(SEARCH_DEFAULT, this.state.inputValue);
+    // this.props.setSearch(this.state.inputValue);
+    console.log(this.props);
+    this.props.changeSearchString(this.state.inputValue);
   }
 
   render(): React.ReactNode {
