@@ -1,20 +1,37 @@
 import React from 'react';
-import { ROOT_ENDPOINT, INITIAL_ENDPOINT, EMPTY_ITEMS_ARRAY } from './data';
+import {
+  ROOT_ENDPOINT,
+  INITIAL_ENDPOINT,
+  EMPTY_ITEMS_ARRAY,
+  BEER_NAME,
+} from './data';
 import { IBeerDetails } from './data';
 
-class Beer extends React.Component<number, { beerList: IBeerDetails[] }> {
-  constructor(x: number = 0) {
-    super(x);
+class Beer extends React.PureComponent<
+  { searchString: string | null },
+  { beerList: IBeerDetails[] }
+> {
+  constructor(
+    props:
+      | { searchString: string | null }
+      | Readonly<{ searchString: string | null }>
+  ) {
+    super(props);
 
     this.state = {
       beerList: EMPTY_ITEMS_ARRAY,
     };
-
-    this.setInitialItemList = this.setInitialItemList.bind(this);
   }
 
-  async setInitialItemList(): Promise<void> {
-    const queryString: string = ROOT_ENDPOINT + INITIAL_ENDPOINT;
+  async componentDidMount(): Promise<void> {
+    let queryString: string;
+    if (this.props.searchString) {
+      queryString =
+        ROOT_ENDPOINT + INITIAL_ENDPOINT + BEER_NAME + this.props.searchString;
+    } else {
+      queryString = ROOT_ENDPOINT + INITIAL_ENDPOINT;
+    }
+
     let responseJSON: IBeerDetails[] | Error;
 
     try {
@@ -22,7 +39,6 @@ class Beer extends React.Component<number, { beerList: IBeerDetails[] }> {
         method: 'GET',
       });
       responseJSON = await responsePromise.json();
-      console.log(responseJSON);
       if (Array.isArray(responseJSON)) {
         this.setState({ beerList: responseJSON });
       }
@@ -55,7 +71,6 @@ class Beer extends React.Component<number, { beerList: IBeerDetails[] }> {
             </div>
           </div>
         ))}
-        <button onClick={this.setInitialItemList}>Init</button>
       </div>
     );
   }

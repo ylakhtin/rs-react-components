@@ -2,6 +2,7 @@ const BEERS_PER_PAGE: number = 10;
 const DEFAULT_PAGE: number = 1;
 const ROOT_ENDPOINT: string = 'https://api.punkapi.com/v2/';
 const INITIAL_ENDPOINT: string = `beers?page=${DEFAULT_PAGE}&per_page=${BEERS_PER_PAGE}`;
+const BEER_NAME: string = '&beer_name=';
 
 export interface IBeerDetails {
   id: number;
@@ -59,4 +60,5 @@ export {
   ROOT_ENDPOINT,
   INITIAL_ENDPOINT,
   EMPTY_ITEMS_ARRAY,
+  BEER_NAME,
 };

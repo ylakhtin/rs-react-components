@@ -1,18 +1,19 @@
 import React from 'react';
-import SearchButton from './components/SearchButton/SearchButton';
-import SearchInput from './components/SearchInput/SearchInput';
+import Search from './components/Search/Search';
 import Beer from './components/Beer/Beer';
+import { SEARCH_DEFAULT } from './data';
 
 class App extends React.Component {
+  initSearch: string | null = localStorage.getItem(SEARCH_DEFAULT);
+
   render(): React.ReactNode {
     return (
       <div className="wrapper">
         <section className="box">
-          <SearchInput />
-          <SearchButton />
+          <Search />
         </section>
         <section className="box">
-          <Beer />
+          <Beer searchString={this.initSearch} />
         </section>
       </div>
     );
