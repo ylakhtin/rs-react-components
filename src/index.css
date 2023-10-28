@@ -55,16 +55,6 @@ input[type='text']:focus {
   padding: 0.5rem;
 }
 
-.image-container {
-  min-width: 6rem;
-  text-align: center;
-}
-
-.item-image {
-  max-width: 5rem;
-  max-height: 10rem;
-}
-
 .data-container {
   display: flex;
   flex-direction: column;

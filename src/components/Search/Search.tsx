@@ -5,11 +5,15 @@ type SearchString = {
   changeSearchString: (newSearchString: string) => void;
 };
 
-class Search extends React.Component<SearchString, { inputValue: string }> {
+class Search extends React.Component<
+  SearchString,
+  { inputValue: string; hasError: boolean }
+> {
   constructor(props: SearchString) {
     super(props);
     this.state = {
       inputValue: '',
+      hasError: false,
     };
 
     this.setInputValue = this.setInputValue.bind(this);
@@ -33,11 +37,11 @@ class Search extends React.Component<SearchString, { inputValue: string }> {
     }
   }
 
-  throwError(): void {
-    throw new Error('This error is thrown artificially');
-  }
-
   render(): React.ReactNode {
+    if (this.state.hasError) {
+      throw Error('this is to check the Error Boundary feature');
+    }
+
     return (
       <div className="search-container">
         <input
@@ -50,7 +54,13 @@ class Search extends React.Component<SearchString, { inputValue: string }> {
         <button onClick={this.setSearchString} className="search-button">
           Search
         </button>
-        <button onClick={this.throwError}>Throw error</button>
+        <button
+          onClick={() => {
+            this.setState({ hasError: true });
+          }}
+        >
+          Throw error
+        </button>
       </div>
     );
   }

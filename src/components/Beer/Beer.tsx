@@ -72,14 +72,6 @@ class Beer extends React.PureComponent<
         ) : (
           this.state.beerList.map((beer, index) => (
             <div className="flex-container" key={index}>
-              {/* <div className="image-container">
-                <img
-                  className="item-image"
-                  key={index}
-                  src={beer.image_url}
-                  alt={beer.name}
-                />
-              </div> */}
               <div className="data-container">
                 <div>{beer.name}</div>
                 <div>{beer.tagline}</div>
