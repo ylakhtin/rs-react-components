@@ -14,9 +14,6 @@ class App extends React.Component<object, { searchString: string | null }> {
 
   setSearchString(newSearchString: string): void {
     this.setState({ searchString: newSearchString });
-    setTimeout(() => {
-      console.log('App.state.searchString - ', this.state.searchString);
-    }, 1000);
   }
 
   render(): React.ReactNode {

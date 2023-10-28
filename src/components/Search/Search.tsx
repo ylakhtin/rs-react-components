@@ -22,9 +22,15 @@ class Search extends React.Component<SearchString, { inputValue: string }> {
 
   setSearchString(): void {
     localStorage.setItem(SEARCH_DEFAULT, this.state.inputValue);
-    // this.props.setSearch(this.state.inputValue);
-    console.log(this.props);
     this.props.changeSearchString(this.state.inputValue);
+  }
+
+  componentDidMount(): void {
+    if (typeof localStorage.getItem(SEARCH_DEFAULT) === 'string') {
+      this.setState({
+        inputValue: localStorage.getItem(SEARCH_DEFAULT) as string,
+      });
+    }
   }
 
   render(): React.ReactNode {
@@ -33,6 +39,7 @@ class Search extends React.Component<SearchString, { inputValue: string }> {
         <input
           type="text"
           onChange={(event) => this.setInputValue(event.target.value)}
+          value={this.state.inputValue}
           className="search-input"
           placeholder="Input search string here..."
         />

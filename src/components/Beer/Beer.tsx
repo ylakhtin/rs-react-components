@@ -54,7 +54,6 @@ class Beer extends React.PureComponent<
   }
 
   componentDidUpdate(prevProps: PropsType) {
-    console.log('search string is changed');
     if (this.props.searchString !== prevProps.searchString) {
       this.queryData();
     }
