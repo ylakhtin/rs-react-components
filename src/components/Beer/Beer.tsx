@@ -11,13 +11,14 @@ type PropsType = { searchString: string | null };
 
 class Beer extends React.PureComponent<
   PropsType,
-  { beerList: IBeerDetails[] }
+  { beerList: IBeerDetails[]; isLoading: boolean }
 > {
   constructor(props: PropsType) {
     super(props);
 
     this.state = {
       beerList: EMPTY_ITEMS_ARRAY,
+      isLoading: false,
     };
 
     this.queryData = this.queryData.bind(this);
@@ -38,6 +39,8 @@ class Beer extends React.PureComponent<
 
     let responseJSON: IBeerDetails[] | Error;
 
+    this.setState({ isLoading: true });
+
     try {
       const responsePromise = await fetch(queryString, {
         method: 'GET',
@@ -51,6 +54,8 @@ class Beer extends React.PureComponent<
         'Cannot reach out to server. Please, check your network connection and server availability.'
       );
     }
+
+    this.setState({ isLoading: false });
   }
 
   componentDidUpdate(prevProps: PropsType) {
@@ -62,25 +67,29 @@ class Beer extends React.PureComponent<
   render(): React.ReactNode {
     return (
       <div>
-        {this.state.beerList.map((beer, index) => (
-          <div className="flex-container" key={index}>
-            <div className="image-container">
-              <img
-                className="item-image"
-                key={index}
-                src={beer.image_url}
-                alt={beer.name}
-              />
+        {this.state.isLoading ? (
+          <div className="loader">Loading, please wait...</div>
+        ) : (
+          this.state.beerList.map((beer, index) => (
+            <div className="flex-container" key={index}>
+              {/* <div className="image-container">
+                <img
+                  className="item-image"
+                  key={index}
+                  src={beer.image_url}
+                  alt={beer.name}
+                />
+              </div> */}
+              <div className="data-container">
+                <div>{beer.name}</div>
+                <div>{beer.tagline}</div>
+                <div>Volume: {beer.abv}%</div>
+                <div>{beer.description}</div>
+                <div>First brewed: {beer.first_brewed}</div>
+              </div>
             </div>
-            <div className="data-container">
-              <div>{beer.name}</div>
-              <div>{beer.tagline}</div>
-              <div>Volume: {beer.abv}%</div>
-              <div>{beer.description}</div>
-              <div>First brewed: {beer.first_brewed}</div>
-            </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     );
   }

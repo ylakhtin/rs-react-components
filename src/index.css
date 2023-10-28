@@ -70,3 +70,9 @@ input[type='text']:focus {
   flex-direction: column;
   gap: 0.5rem;
 }
+
+.loader {
+  align-self: center;
+  background-color: white;
+  font-size: 2rem;
+}

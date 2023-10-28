@@ -33,6 +33,10 @@ class Search extends React.Component<SearchString, { inputValue: string }> {
     }
   }
 
+  throwError(): void {
+    throw new Error('This error is thrown artificially');
+  }
+
   render(): React.ReactNode {
     return (
       <div className="search-container">
@@ -46,6 +50,7 @@ class Search extends React.Component<SearchString, { inputValue: string }> {
         <button onClick={this.setSearchString} className="search-button">
           Search
         </button>
+        <button onClick={this.throwError}>Throw error</button>
       </div>
     );
   }
