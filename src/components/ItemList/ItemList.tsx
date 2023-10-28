@@ -9,7 +9,7 @@ import { IBeerDetails } from './data';
 
 type PropsType = { searchString: string | null };
 
-class Beer extends React.PureComponent<
+class ItemList extends React.PureComponent<
   PropsType,
   { beerList: IBeerDetails[]; isLoading: boolean }
 > {
@@ -87,4 +87,4 @@ class Beer extends React.PureComponent<
   }
 }
 
-export default Beer;
+export default ItemList;

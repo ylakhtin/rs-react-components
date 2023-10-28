@@ -1,6 +1,6 @@
 import React from 'react';
 import Search from './components/Search/Search';
-import Beer from './components/Beer/Beer';
+import Beer from './components/ItemList/ItemList';
 import { SEARCH_DEFAULT } from './data';
 
 class App extends React.Component<object, { searchString: string | null }> {
