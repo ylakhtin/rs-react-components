@@ -18,13 +18,15 @@ class App extends React.Component<object, { searchString: string | null }> {
 
   render(): React.ReactNode {
     return (
-      <div className="wrapper">
-        <section className="box">
-          <Search changeSearchString={this.setSearchString} />
-        </section>
-        <section className="box">
-          <Beer searchString={this.state.searchString} />
-        </section>
+      <div className="main-space">
+        <div className="wrapper">
+          <section className="box">
+            <Search changeSearchString={this.setSearchString} />
+          </section>
+          <section className="box">
+            <Beer searchString={this.state.searchString} />
+          </section>
+        </div>
       </div>
     );
   }
