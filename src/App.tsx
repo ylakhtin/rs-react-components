@@ -12,11 +12,11 @@ class App extends React.Component<object, { searchString: string | null }> {
     this.setSearchString = this.setSearchString.bind(this);
   }
 
-  setSearchString(newSearchString: string): void {
+  public setSearchString(newSearchString: string): void {
     this.setState({ searchString: newSearchString });
   }
 
-  render(): React.ReactNode {
+  public render(): React.ReactNode {
     return (
       <div className="main-space">
         <div className="wrapper">

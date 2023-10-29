@@ -20,16 +20,16 @@ class Search extends React.Component<
     this.setSearchString = this.setSearchString.bind(this);
   }
 
-  setInputValue(searchString: string): void {
+  private setInputValue(searchString: string): void {
     this.setState({ inputValue: searchString });
   }
 
-  setSearchString(): void {
+  private setSearchString(): void {
     localStorage.setItem(SEARCH_DEFAULT, this.state.inputValue);
     this.props.changeSearchString(this.state.inputValue);
   }
 
-  componentDidMount(): void {
+  public componentDidMount(): void {
     if (typeof localStorage.getItem(SEARCH_DEFAULT) === 'string') {
       this.setState({
         inputValue: localStorage.getItem(SEARCH_DEFAULT) as string,
@@ -37,7 +37,7 @@ class Search extends React.Component<
     }
   }
 
-  render(): React.ReactNode {
+  public render(): React.ReactNode {
     if (this.state.hasError) {
       throw Error('this is to check the Error Boundary feature');
     }

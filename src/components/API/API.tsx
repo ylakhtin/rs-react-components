@@ -2,7 +2,7 @@ import { ROOT_ENDPOINT, INITIAL_ENDPOINT, BEER_NAME } from '../ItemList/data';
 import { IBeerDetails } from '../ItemList/data';
 
 class API {
-  async queryItems(
+  public async queryItems(
     searchString: string | null,
     callback: (newState: { beerList: IBeerDetails[] }) => void
   ): Promise<boolean> {
@@ -33,7 +33,6 @@ class API {
       callback({ beerList: responseJSON });
       requestOK = true;
     } else {
-      console.log('Invalid query');
       requestOK = false;
     }
 

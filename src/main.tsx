@@ -8,7 +8,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ErrorBoundary
       fallback={
-        'Error, reload the page! This is to test Error boundary! This is a fallback message!'
+        'Error, please, reload the page! This is to test Error boundary! This is a fallback message!'
       }
     >
       <App />

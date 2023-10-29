@@ -18,15 +18,15 @@ class ErrorBoundary extends React.Component<
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError() {
+  public static getDerivedStateFromError() {
     return { hasError: true };
   }
 
-  componentDidCatch(error: Error, info: React.ErrorInfo): void {
+  public componentDidCatch(error: Error, info: React.ErrorInfo): void {
     console.log(error, info);
   }
 
-  render() {
+  public render() {
     if (this.state.hasError) {
       return <div>{this.props.fallback}</div>;
     }

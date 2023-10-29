@@ -21,11 +21,7 @@ class ItemList extends React.PureComponent<
     this.queryData = this.queryData.bind(this);
   }
 
-  componentDidMount(): void {
-    this.queryData();
-  }
-
-  async queryData(): Promise<void> {
+  private async queryData(): Promise<void> {
     this.setState({ isLoading: true });
 
     const dataQuery = new API();
@@ -39,13 +35,17 @@ class ItemList extends React.PureComponent<
     this.setState({ isLoading: false });
   }
 
-  componentDidUpdate(prevProps: PropsType) {
+  public componentDidMount(): void {
+    this.queryData();
+  }
+
+  public componentDidUpdate(prevProps: PropsType) {
     if (this.props.searchString !== prevProps.searchString) {
       this.queryData();
     }
   }
 
-  render(): React.ReactNode {
+  public render(): React.ReactNode {
     return (
       <div>
         <div>
