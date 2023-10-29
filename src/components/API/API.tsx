@@ -5,11 +5,13 @@ class API {
   async queryItems(
     searchString: string | null,
     callback: (newState: { beerList: IBeerDetails[] }) => void
-  ) {
+  ): Promise<boolean> {
     let queryString: string;
+    let requestOK: boolean;
 
     if (searchString) {
-      queryString = ROOT_ENDPOINT + INITIAL_ENDPOINT + BEER_NAME + searchString;
+      queryString =
+        ROOT_ENDPOINT + INITIAL_ENDPOINT + BEER_NAME + searchString.trim();
     } else {
       queryString = ROOT_ENDPOINT + INITIAL_ENDPOINT;
     }
@@ -21,14 +23,21 @@ class API {
         method: 'GET',
       });
       responseJSON = await responsePromise.json();
-      if (Array.isArray(responseJSON)) {
-        callback({ beerList: responseJSON });
-      }
     } catch (error) {
       responseJSON = new Error(
         'Cannot reach out to server. Please, check your network connection and server availability.'
       );
     }
+
+    if (Array.isArray(responseJSON)) {
+      callback({ beerList: responseJSON });
+      requestOK = true;
+    } else {
+      console.log('Invalid query');
+      requestOK = false;
+    }
+
+    return requestOK;
   }
 }
 
