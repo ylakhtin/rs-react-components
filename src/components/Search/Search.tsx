@@ -18,7 +18,6 @@ const Search = function ({ setSearchString }: SearchProps) {
   function setSearchStringInApp() {
     localStorage.setItem(SEARCH_DEFAULT, inputValue);
     setSearchString(inputValue);
-    console.log('New search string is set in localStorage and App state');
   }
 
   return (

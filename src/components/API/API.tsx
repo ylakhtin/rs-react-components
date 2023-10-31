@@ -4,7 +4,6 @@ import { IBeerDetails } from '../ItemList/data';
 async function queryItems(
   searchString: string | null
 ): Promise<[boolean, IBeerDetails[] | Error]> {
-  console.log('API is called');
   let queryString: string;
   let requestOK: boolean;
 
