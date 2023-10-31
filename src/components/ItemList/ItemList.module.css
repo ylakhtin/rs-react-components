@@ -1,0 +1,21 @@
+.flexContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  border-bottom: 1px solid teal;
+  margin: 1rem 0;
+  font-size: 1.2rem;
+}
+
+.dataContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.loader {
+  align-self: center;
+  background-color: white;
+  font-size: 2rem;
+}

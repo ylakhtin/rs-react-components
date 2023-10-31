@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import classes from './ItemList.module.css';
 import { EMPTY_ITEMS_ARRAY } from './data';
 import queryItems from '../API/API';
 
@@ -37,15 +38,15 @@ const ItemList = function (props: { searchString: string | null }) {
       </div>
       <div>
         {!requestOK ? (
-          <div className="loader">Bad request</div>
+          <div className={classes.loader}>Bad request</div>
         ) : (
           <div>
             {isLoading ? (
-              <div className="loader">Loading, please wait...</div>
+              <div className={classes.loader}>Loading, please wait...</div>
             ) : (
               beerList.map((beer, index) => (
-                <div className="flex-container" key={index}>
-                  <div className="data-container">
+                <div className={classes.flexContainer} key={index}>
+                  <div className={classes.dataContainer}>
                     <div>{beer.name}</div>
                     <div>{beer.tagline}</div>
                     <div>Volume: {beer.abv}%</div>

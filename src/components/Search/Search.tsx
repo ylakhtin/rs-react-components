@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import classes from './Search.module.css';
 import { SEARCH_DEFAULT } from '../../data';
 
 interface SearchProps {
@@ -19,15 +20,15 @@ const Search = function ({ setSearchString }: SearchProps) {
   }
 
   return (
-    <div className="search-container">
+    <div className={classes.searchContainer}>
       <input
         type="text"
         onChange={(event) => setValue(event.target.value)}
         value={inputValue}
-        className="search-input"
+        className={classes.searchInput}
         placeholder="Input search string here..."
       />
-      <button onClick={setSearchStringInApp} className="search-button">
+      <button onClick={setSearchStringInApp} className={classes.searchButton}>
         Search
       </button>
     </div>
