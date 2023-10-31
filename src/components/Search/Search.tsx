@@ -7,7 +7,9 @@ interface SearchProps {
 }
 
 const Search = function ({ setSearchString }: SearchProps) {
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(
+    localStorage.getItem(SEARCH_DEFAULT) || ''
+  );
 
   function setValue(searchString: string) {
     setInputValue(searchString);
