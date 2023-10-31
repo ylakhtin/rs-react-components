@@ -1,86 +1,65 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { EMPTY_ITEMS_ARRAY } from './data';
-import { IBeerDetails } from './data';
-import API from '../API/API';
+import queryItems from '../API/API';
 
-type PropsType = { searchString: string | null };
+const ItemList = function (props: { searchString: string | null }) {
+  const [beerList, setBeerList] = useState(EMPTY_ITEMS_ARRAY);
+  const [isLoading, setIsLoading] = useState(false);
+  const [requestOK, setRequestOK] = useState(true);
 
-class ItemList extends React.PureComponent<
-  PropsType,
-  { beerList: IBeerDetails[]; isLoading: boolean; requestOK: boolean }
-> {
-  constructor(props: PropsType) {
-    super(props);
+  useEffect(() => {
+    async function queryData() {
+      setIsLoading(true);
 
-    this.state = {
-      beerList: EMPTY_ITEMS_ARRAY,
-      isLoading: false,
-      requestOK: true,
-    };
+      const [requestOKCandidate, beerListCandidate] = await queryItems(
+        props.searchString
+      );
 
-    this.queryData = this.queryData.bind(this);
-  }
+      setRequestOK(requestOKCandidate);
+      if (Array.isArray(beerListCandidate)) {
+        setBeerList(beerListCandidate);
+      }
 
-  private async queryData(): Promise<void> {
-    this.setState({ isLoading: true });
-
-    const dataQuery = new API();
-    this.setState({
-      requestOK: await dataQuery.queryItems(
-        this.props.searchString,
-        (obj: { beerList: IBeerDetails[] }) => this.setState(obj)
-      ),
-    });
-
-    this.setState({ isLoading: false });
-  }
-
-  public componentDidMount(): void {
-    this.queryData();
-  }
-
-  public componentDidUpdate(prevProps: PropsType) {
-    if (this.props.searchString !== prevProps.searchString) {
-      this.queryData();
+      setIsLoading(false);
     }
-  }
 
-  public render(): React.ReactNode {
-    return (
+    queryData();
+  }, [props.searchString]);
+
+  return (
+    <div>
       <div>
-        <div>
-          {!this.state.beerList.length || !this.state.requestOK ? (
-            <div>No matches found</div>
-          ) : (
-            <div>Matches on this page: {this.state.beerList.length}</div>
-          )}
-        </div>
-        <div>
-          {!this.state.requestOK ? (
-            <div className="loader">Bad request</div>
-          ) : (
-            <div>
-              {this.state.isLoading ? (
-                <div className="loader">Loading, please wait...</div>
-              ) : (
-                this.state.beerList.map((beer, index) => (
-                  <div className="flex-container" key={index}>
-                    <div className="data-container">
-                      <div>{beer.name}</div>
-                      <div>{beer.tagline}</div>
-                      <div>Volume: {beer.abv}%</div>
-                      <div>{beer.description}</div>
-                      <div>First brewed: {beer.first_brewed}</div>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          )}
-        </div>
+        {!beerList.length || !requestOK ? (
+          <div>No matches found</div>
+        ) : (
+          <div>Matches on this page: {beerList.length}</div>
+        )}
       </div>
-    );
-  }
-}
+      <div>
+        {!requestOK ? (
+          <div className="loader">Bad request</div>
+        ) : (
+          <div>
+            {isLoading ? (
+              <div className="loader">Loading, please wait...</div>
+            ) : (
+              beerList.map((beer, index) => (
+                <div className="flex-container" key={index}>
+                  <div className="data-container">
+                    <div>{beer.name}</div>
+                    <div>{beer.tagline}</div>
+                    <div>Volume: {beer.abv}%</div>
+                    <div>{beer.description}</div>
+                    <div>First brewed: {beer.first_brewed}</div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
 export default ItemList;
