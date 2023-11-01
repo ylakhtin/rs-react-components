@@ -1,19 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import classes from './ItemList.module.css';
 import { EMPTY_ITEMS_ARRAY } from './data';
 import queryItems from '../API/API';
+import Paginator from '../Paginator/Paginator';
 
 const ItemList = function (props: { searchString: string | null }) {
   const [beerList, setBeerList] = useState(EMPTY_ITEMS_ARRAY);
   const [isLoading, setIsLoading] = useState(false);
   const [requestOK, setRequestOK] = useState(true);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [maxPage] = useState(4);
 
-  useEffect(() => {
-    async function queryData() {
+  const queryData = useCallback(
+    async (pageNumber: number) => {
       setIsLoading(true);
 
       const [requestOKCandidate, beerListCandidate] = await queryItems(
-        props.searchString
+        props.searchString,
+        pageNumber
       );
 
       setRequestOK(requestOKCandidate);
@@ -22,13 +26,30 @@ const ItemList = function (props: { searchString: string | null }) {
       }
 
       setIsLoading(false);
-    }
+    },
+    [props.searchString]
+  );
 
-    queryData();
-  }, [props.searchString]);
+  useEffect(() => {
+    queryData(pageNumber);
+  }, [pageNumber, props.searchString, queryData]);
+
+  function prevPage(): void {
+    if (pageNumber - 1 >= 1) {
+      setPageNumber(pageNumber - 1);
+    }
+    queryData(pageNumber);
+  }
+
+  function nextPage(): void {
+    if (pageNumber + 1 <= maxPage) {
+      setPageNumber(pageNumber + 1);
+    }
+    queryData(pageNumber);
+  }
 
   return (
-    <div>
+    <div className={classes.wrapper}>
       <div>
         {!beerList.length || !requestOK ? (
           <div>No matches found</div>
@@ -36,7 +57,7 @@ const ItemList = function (props: { searchString: string | null }) {
           <div>Matches on this page: {beerList.length}</div>
         )}
       </div>
-      <div>
+      <div className={classes.filler}>
         {!requestOK ? (
           <div className={classes.loader}>Bad request</div>
         ) : (
@@ -59,6 +80,11 @@ const ItemList = function (props: { searchString: string | null }) {
           </div>
         )}
       </div>
+      <Paginator
+        prevPage={prevPage}
+        nextPage={nextPage}
+        pageNumber={pageNumber}
+      />
     </div>
   );
 };

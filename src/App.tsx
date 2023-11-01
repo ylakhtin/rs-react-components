@@ -11,12 +11,8 @@ const App = function () {
   return (
     <div className="main-space">
       <div className="wrapper">
-        <section className="box">
-          <Search setSearchString={setSearchString} />
-        </section>
-        <section className="box">
-          <Beer searchString={searchString} />
-        </section>
+        <Search setSearchString={setSearchString} />
+        <Beer searchString={searchString} />
       </div>
     </div>
   );

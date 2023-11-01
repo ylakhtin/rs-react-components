@@ -1,8 +1,3 @@
-const BEERS_PER_PAGE: number = 10;
-const DEFAULT_PAGE: number = 1;
-const ROOT_ENDPOINT: string = 'https://api.punkapi.com/v2/';
-const INITIAL_ENDPOINT: string = `beers?page=${DEFAULT_PAGE}&per_page=${BEERS_PER_PAGE}`;
-const BEER_NAME: string = '&beer_name=';
 const EMPTY_ITEMS_ARRAY: IBeerDetails[] = [
   {
     id: 0,
@@ -53,11 +48,4 @@ export interface IBeerDetails {
   contributed_by: string;
 }
 
-export {
-  BEERS_PER_PAGE,
-  DEFAULT_PAGE,
-  ROOT_ENDPOINT,
-  INITIAL_ENDPOINT,
-  EMPTY_ITEMS_ARRAY,
-  BEER_NAME,
-};
+export { EMPTY_ITEMS_ARRAY };

@@ -1,19 +1,13 @@
-import { ROOT_ENDPOINT, INITIAL_ENDPOINT, BEER_NAME } from '../ItemList/data';
+import { ROOT_ENDPOINT, BEERS, PAGE_NUMBER, PER_PAGE, BEER_NAME } from './data';
 import { IBeerDetails } from '../ItemList/data';
 
 async function queryItems(
-  searchString: string | null
+  searchString: string | null,
+  pageNumber: number = 1,
+  perPage: number = 4
 ): Promise<[boolean, IBeerDetails[] | Error]> {
-  let queryString: string;
+  const queryString = buildQueryString(searchString, pageNumber, perPage);
   let requestOK: boolean;
-
-  if (searchString) {
-    queryString =
-      ROOT_ENDPOINT + INITIAL_ENDPOINT + BEER_NAME + searchString.trim();
-  } else {
-    queryString = ROOT_ENDPOINT + INITIAL_ENDPOINT;
-  }
-
   let responseJSON: IBeerDetails[] | Error;
 
   try {
@@ -33,6 +27,31 @@ async function queryItems(
     requestOK = false;
   }
   return [requestOK, responseJSON];
+}
+
+function buildQueryString(
+  searchString: string | null,
+  pageNumber: number,
+  perPage: number
+): string {
+  let queryString: string;
+
+  if (searchString) {
+    queryString =
+      ROOT_ENDPOINT +
+      BEERS +
+      PAGE_NUMBER +
+      pageNumber +
+      PER_PAGE +
+      perPage +
+      BEER_NAME +
+      searchString.trim();
+  } else {
+    queryString =
+      ROOT_ENDPOINT + BEERS + PAGE_NUMBER + pageNumber + PER_PAGE + perPage;
+  }
+
+  return queryString;
 }
 
 export default queryItems;

@@ -19,3 +19,13 @@
   background-color: white;
   font-size: 2rem;
 }
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 90vh;
+}
+
+.filler {
+  flex: 1;
+}
