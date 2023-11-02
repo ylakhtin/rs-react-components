@@ -9,7 +9,7 @@ function Paginator(props: {
   return (
     <div className={classes.container}>
       <button onClick={props.prevPage}>Prev</button>
-      <input type="number" value={props.pageNumber} />
+      <div>{props.pageNumber}</div>
       <button onClick={props.nextPage}>Next</button>
     </div>
   );

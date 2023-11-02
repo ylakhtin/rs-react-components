@@ -1,3 +1,9 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 5rem);
+}
+
 .flexContainer {
   display: flex;
   flex-direction: row;
@@ -6,6 +12,17 @@
   border-bottom: 1px solid teal;
   margin: 1rem 0;
   font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.imageContainer {
+  min-width: 6rem;
+  text-align: center;
+}
+
+.itemImage {
+  max-width: 5rem;
+  max-height: 10rem;
 }
 
 .dataContainer {
@@ -15,15 +32,13 @@
 }
 
 .loader {
-  align-self: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  /* text-align: center; */
   background-color: white;
   font-size: 2rem;
-}
-
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  min-height: 90vh;
 }
 
 .filler {

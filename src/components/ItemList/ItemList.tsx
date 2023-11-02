@@ -62,21 +62,33 @@ const ItemList = function (props: { searchString: string | null }) {
           <div className={classes.loader}>Bad request</div>
         ) : (
           <div>
-            {isLoading ? (
-              <div className={classes.loader}>Loading, please wait...</div>
-            ) : (
-              beerList.map((beer, index) => (
-                <div className={classes.flexContainer} key={index}>
-                  <div className={classes.dataContainer}>
-                    <div>{beer.name}</div>
-                    <div>{beer.tagline}</div>
-                    <div>Volume: {beer.abv}%</div>
-                    <div>{beer.description}</div>
-                    <div>First brewed: {beer.first_brewed}</div>
-                  </div>
+            <div>
+              {isLoading ? (
+                <div className={classes.loader}>
+                  <div>Loading, please wait...</div>
                 </div>
-              ))
-            )}
+              ) : (
+                beerList.map((beer, index) => (
+                  <div className={classes.flexContainer} key={index}>
+                    <div className={classes.imageContainer}>
+                      <img
+                        className={classes.itemImage}
+                        key={index}
+                        src={beer.image_url}
+                        alt={beer.name}
+                      />
+                    </div>
+                    <div className={classes.dataContainer}>
+                      <div>{beer.name}</div>
+                      <div>{beer.tagline}</div>
+                      <div>Volume: {beer.abv}%</div>
+                      <div>{beer.description}</div>
+                      <div>First brewed: {beer.first_brewed}</div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         )}
       </div>
