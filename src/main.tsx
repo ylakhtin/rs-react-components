@@ -10,11 +10,17 @@ import {
   createRoutesFromElements,
 } from 'react-router-dom';
 import ItemDetails from './components/ItemDetails/ItemDetails';
+import ItemList from './components/ItemList/ItemList';
+// import { SEARCH_DEFAULT } from './data';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-      <Route path="/ItemDetails" element={<ItemDetails />} />
+      <Route path="beers" element={<ItemList />}>
+        <Route path="/beers/details/:index" element={<ItemDetails />} />
+      </Route>
+      <Route path="/page/:pageNum/search/:searchStr" element={<ItemList />} />
+      <Route path="/page/:pageNumber" element={<ItemList />} />
     </Route>
   )
 );
