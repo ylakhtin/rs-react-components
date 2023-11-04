@@ -38,6 +38,8 @@ const ItemList = function () {
   useEffect(() => {
     if (searchStr) {
       setSearchText(searchStr);
+    } else {
+      setSearchText('');
     }
     if (pageNum) {
       setPageNumber(Number(pageNum));

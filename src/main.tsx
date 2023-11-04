@@ -11,7 +11,6 @@ import {
 } from 'react-router-dom';
 import ItemDetails from './components/ItemDetails/ItemDetails';
 import ItemList from './components/ItemList/ItemList';
-// import { SEARCH_DEFAULT } from './data';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,7 +19,7 @@ const router = createBrowserRouter(
         <Route path="/beers/details/:index" element={<ItemDetails />} />
       </Route>
       <Route path="/page/:pageNum/search/:searchStr" element={<ItemList />} />
-      <Route path="/page/:pageNumber" element={<ItemList />} />
+      <Route path="/page/:pageNum" element={<ItemList />} />
     </Route>
   )
 );

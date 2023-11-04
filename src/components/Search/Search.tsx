@@ -25,7 +25,10 @@ const Search = function () {
         className={classes.searchInput}
         placeholder="Input search string here..."
       />
-      <NavLink to={`/page/1/search/${inputValue}`} key={inputValue}>
+      <NavLink
+        to={inputValue ? `/page/1/search/${inputValue}` : '/page/1'}
+        key={inputValue}
+      >
         <button onClick={setSearchStringInApp} className={classes.searchButton}>
           Search
         </button>
