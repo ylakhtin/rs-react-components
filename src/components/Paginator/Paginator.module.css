@@ -4,3 +4,37 @@
   gap: 1rem;
   justify-content: center;
 }
+
+input[type=number] {
+  -moz-appearance: textfield;
+  width: 2rem;
+  text-align: center;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+button {
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+.itemsPerPage {
+  padding: 0.5rem;
+  text-align: center;
+}
+
+select {
+  height: 1.5rem;
+  font-size: 1rem;
+}
+
+.message {
+  margin: 1rem;
+  text-align: center;
+  color: red;
+  font-size: 1.5rem;
+}

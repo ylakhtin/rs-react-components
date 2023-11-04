@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import classes from './Search.module.css';
 import { SEARCH_DEFAULT } from '../../data';
 import { NavLink } from 'react-router-dom';
+import Logo from '../Logo/Logo';
 
 const Search = function () {
   const [inputValue, setInputValue] = useState(
@@ -18,6 +19,7 @@ const Search = function () {
 
   return (
     <div className={classes.searchContainer}>
+      <Logo />
       <input
         type="text"
         onChange={(event) => setValue(event.target.value)}

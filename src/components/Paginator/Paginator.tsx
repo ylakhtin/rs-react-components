@@ -1,46 +1,63 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import classes from './Paginator.module.css';
-import { NavLink } from 'react-router-dom';
+import ENTER_MESSAGE from './data';
 
 function Paginator(props: {
   prevPage: () => void;
   nextPage: () => void;
+  setPageNum: React.Dispatch<React.SetStateAction<number>>;
   pageNumber: number;
   searchString: string;
 }) {
-  const [searchString, setSearchString] = useState('');
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(props.pageNumber);
+  const [showHint, setShowHint] = useState(false);
+  const messageRef = useRef(null);
 
   useEffect(() => {
-    if (props.searchString) {
-      console.log(page);
-      setSearchString(
-        `/page/${props.pageNumber + 1}/search/${props.searchString}`
-      );
-    } else {
-      setSearchString(`/page/${props.pageNumber + 1}`);
-    }
-  }, [page, props.pageNumber, props.searchString]);
+    setPage(props.pageNumber);
+  }, [props.pageNumber]);
 
-  function previousPage() {
-    setPage(page - 1);
-    props.prevPage();
+  function showMessage() {
+    setShowHint(true);
   }
 
-  function nextPage() {
-    setPage(page + 1);
-    props.nextPage();
+  useEffect(() => {
+    if (showHint && messageRef.current) {
+      (messageRef.current as HTMLDivElement).textContent = ENTER_MESSAGE;
+    }
+  }, [showHint]);
+
+  function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Enter') {
+      setShowHint(false);
+      if (messageRef.current) {
+        (messageRef.current as HTMLDivElement).textContent = '';
+      }
+      props.setPageNum(page);
+    }
   }
 
   return (
-    <div className={classes.container}>
-      <NavLink to={searchString}>
-        <button onClick={previousPage}>Prev</button>
-      </NavLink>
-      <div>{props.pageNumber}</div>
-      <NavLink to={searchString}>
-        <button onClick={nextPage}>Next</button>
-      </NavLink>
+    <div>
+      <div className={classes.container}>
+        <button onClick={props.prevPage}>Prev</button>
+        <input
+          type="number"
+          value={page}
+          onChange={(event) => setPage(Number(event.target.value))}
+          onClick={showMessage}
+          onKeyDown={handleKeyPress}
+        />
+        <button onClick={props.nextPage}>Next</button>
+      </div>
+      <div className={classes.itemsPerPage}>
+        <span>Items amount: </span>
+        <select name="" id="">
+          <option value="4">4 per page</option>
+          <option value="10">10 per page</option>
+        </select>
+      </div>
+      <div ref={messageRef} className={classes.message}></div>
     </div>
   );
 }
