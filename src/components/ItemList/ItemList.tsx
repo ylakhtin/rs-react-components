@@ -68,9 +68,11 @@ const ItemList = function () {
       <div className={classes.wrapper}>
         <div>
           {!beerList.length || !requestOK ? (
-            <div>No matches found</div>
+            <div className={classes.matches}>No matches found</div>
           ) : (
-            <div>Matches on this page: {beerList.length}</div>
+            <div className={classes.matches}>
+              Matches on this page: {beerList.length}
+            </div>
           )}
         </div>
         <div className={classes.filler}>

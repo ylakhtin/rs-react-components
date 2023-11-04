@@ -1,5 +1,13 @@
 .wrapper {
-  flex-grow: 1;
   flex-shrink: 0;
-  flex-basis: 30%;
+  flex-basis: 40%;
+  margin: 1rem;
+  padding: 1rem;
+  font-size: 1.5rem;
+  border: 1px dotted teal;
+}
+
+span {
+  font-size: 1.5rem;
+  color: teal;
 }

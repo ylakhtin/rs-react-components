@@ -19,8 +19,13 @@ const ItemDetails = function () {
 
   return (
     <div className={classes.wrapper}>
-      <div>Description: {itemData[0].description}</div>
-      <div>Brewed first: {itemData[0].first_brewed}</div>
+      <div>
+        <span>Description: </span> {itemData[0].description}
+      </div>
+      <div>
+        <span>Brewed first: </span>
+        {itemData[0].first_brewed}
+      </div>
     </div>
   );
 };
