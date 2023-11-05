@@ -132,6 +132,7 @@ const ItemList = function () {
         setPerPage={setPerPage}
         pageNumber={pageNumber}
         searchString={searchText}
+        isLoading={isLoading}
       />
     </div>
   );

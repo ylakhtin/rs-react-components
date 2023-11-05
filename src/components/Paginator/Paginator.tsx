@@ -10,9 +10,11 @@ function Paginator(props: {
   setPerPage: React.Dispatch<React.SetStateAction<number>>;
   pageNumber: number;
   searchString: string;
+  isLoading: boolean;
 }) {
   const [page, setPage] = useState(props.pageNumber);
   const [showHint, setShowHint] = useState(false);
+  const [message, setMessage] = useState('');
   const messageRef = useRef(null);
   const navigate = useNavigate();
 
@@ -20,21 +22,21 @@ function Paginator(props: {
     setPage(props.pageNumber);
   }, [props.pageNumber]);
 
+  useEffect(() => {
+    if (showHint && messageRef.current) {
+      setMessage(ENTER_MESSAGE);
+    }
+  }, [showHint]);
+
   function showMessage() {
     setShowHint(true);
   }
-
-  useEffect(() => {
-    if (showHint && messageRef.current) {
-      (messageRef.current as HTMLDivElement).textContent = ENTER_MESSAGE;
-    }
-  }, [showHint]);
 
   function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key === 'Enter') {
       setShowHint(false);
       if (messageRef.current) {
-        (messageRef.current as HTMLDivElement).textContent = '';
+        setMessage('');
       }
       props.setPageNum(page);
     }
@@ -51,25 +53,31 @@ function Paginator(props: {
 
   return (
     <div>
-      <div className={classes.container}>
-        <button onClick={props.prevPage}>Prev</button>
-        <input
-          type="number"
-          value={page}
-          onChange={(event) => setPage(Number(event.target.value))}
-          onClick={showMessage}
-          onKeyDown={handleKeyPress}
-        />
-        <button onClick={props.nextPage}>Next</button>
-      </div>
-      <div className={classes.itemsPerPage}>
-        <span>Items amount: </span>
-        <select name="perPage" id="itemsPerPage" onChange={setItemsPerPage}>
-          <option value="4">4 per page</option>
-          <option value="10">10 per page</option>
-        </select>
-      </div>
-      <div ref={messageRef} className={classes.message}></div>
+      {!props.isLoading && (
+        <div>
+          <div className={classes.container}>
+            <button onClick={props.prevPage}>Prev</button>
+            <input
+              type="number"
+              value={page}
+              onChange={(event) => setPage(Number(event.target.value))}
+              onClick={showMessage}
+              onKeyDown={handleKeyPress}
+            />
+            <button onClick={props.nextPage}>Next</button>
+          </div>
+          <div className={classes.itemsPerPage}>
+            <span>Items amount: </span>
+            <select name="perPage" id="itemsPerPage" onChange={setItemsPerPage}>
+              <option value="4">4 per page</option>
+              <option value="10">10 per page</option>
+            </select>
+          </div>
+          <div ref={messageRef} className={classes.message}>
+            {message}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
