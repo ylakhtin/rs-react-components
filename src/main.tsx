@@ -4,6 +4,7 @@ import App from './App';
 import './index.css';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import {
+  Navigate,
   Route,
   RouterProvider,
   createBrowserRouter,
@@ -15,6 +16,7 @@ import ItemList from './components/ItemList/ItemList';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
+      <Route index element={<Navigate to="/page/1" />} />
       <Route path="/page/:pageNum" element={<ItemList />}>
         <Route path="/page/:pageNum/details/:index" element={<ItemDetails />} />
       </Route>
