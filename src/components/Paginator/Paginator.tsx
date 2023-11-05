@@ -55,7 +55,10 @@ function Paginator(props: {
   return (
     <div>
       {!props.isLoading && (
-        <div>
+        <div className={classes.mainContainer}>
+          <div ref={messageRef} className={classes.message}>
+            {message}
+          </div>
           <div className={classes.container}>
             <button onClick={props.prevPage}>Prev</button>
             <input
@@ -75,9 +78,6 @@ function Paginator(props: {
                 {props.perPage === 4 ? 10 : 4} per page
               </option>
             </select>
-          </div>
-          <div ref={messageRef} className={classes.message}>
-            {message}
           </div>
         </div>
       )}

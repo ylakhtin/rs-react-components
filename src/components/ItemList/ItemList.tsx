@@ -5,13 +5,13 @@ import { queryItems } from '../API/API';
 import Paginator from '../Paginator/Paginator';
 import { EMPTY_ITEMS_ARRAY } from './data';
 import { SEARCH_DEFAULT } from '../../data';
+import { MAX_AMOUNT } from '../../data';
 
 const ItemList = function () {
   const [beerList, setBeerList] = useState(EMPTY_ITEMS_ARRAY);
   const [isLoading, setIsLoading] = useState(false);
   const [requestOK, setRequestOK] = useState(true);
   const [sectionOpen, setSectionOpen] = useState(false);
-  // query parameters
   const [searchText, setSearchText] = useState('');
   const [pageNumber, setPageNumber] = useState(1);
   const [perPage, setPerPage] = useState(4);
@@ -60,24 +60,27 @@ const ItemList = function () {
   }, [pageNumber, searchText, queryData]);
 
   async function prevPage(): Promise<void> {
-    if (searchText) {
-      navigate(`/page/${pageNumber - 1}/search/${searchText}`);
-    } else {
-      navigate(`/page/${pageNumber - 1}`);
+    if (pageNumber - 1 >= 1) {
+      if (searchText) {
+        navigate(`/page/${pageNumber - 1}/search/${searchText}`);
+      } else {
+        navigate(`/page/${pageNumber - 1}`);
+      }
     }
   }
 
   async function nextPage(): Promise<void> {
-    if (searchText) {
-      navigate(`/page/${pageNumber + 1}/search/${searchText}`);
-    } else {
-      navigate(`/page/${pageNumber + 1}`);
+    const limit = Math.ceil(MAX_AMOUNT / perPage);
+    if (pageNumber + 1 <= limit) {
+      if (searchText) {
+        navigate(`/page/${pageNumber + 1}/search/${searchText}`);
+      } else {
+        navigate(`/page/${pageNumber + 1}`);
+      }
     }
   }
 
-  function closeRightSection() {
-    console.log(index);
-
+  function setRightSectionState() {
     if (!index) {
       setSectionOpen(true);
     } else {
@@ -86,7 +89,7 @@ const ItemList = function () {
   }
 
   return (
-    <div>
+    <div className={classes.mainContainer}>
       <div className={classes.container}>
         <div className={classes.wrapper}>
           <div>
@@ -128,7 +131,7 @@ const ItemList = function () {
                       <div
                         className={classes.flexContainer}
                         key={index}
-                        onClick={closeRightSection}
+                        onClick={setRightSectionState}
                       >
                         <div className={classes.imageContainer}>
                           <img
