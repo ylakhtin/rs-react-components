@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import classes from './Paginator.module.css';
 import ENTER_MESSAGE from './data';
 
@@ -6,12 +7,14 @@ function Paginator(props: {
   prevPage: () => void;
   nextPage: () => void;
   setPageNum: React.Dispatch<React.SetStateAction<number>>;
+  setPerPage: React.Dispatch<React.SetStateAction<number>>;
   pageNumber: number;
   searchString: string;
 }) {
   const [page, setPage] = useState(props.pageNumber);
   const [showHint, setShowHint] = useState(false);
   const messageRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setPage(props.pageNumber);
@@ -37,6 +40,15 @@ function Paginator(props: {
     }
   }
 
+  function setItemsPerPage(event: React.ChangeEvent<HTMLSelectElement>) {
+    props.setPerPage(Number(event.target.value));
+    if (props.searchString) {
+      navigate(`/page/${1}/search/${props.searchString}`);
+    } else {
+      navigate(`/page/${1}`);
+    }
+  }
+
   return (
     <div>
       <div className={classes.container}>
@@ -52,7 +64,7 @@ function Paginator(props: {
       </div>
       <div className={classes.itemsPerPage}>
         <span>Items amount: </span>
-        <select name="" id="">
+        <select name="perPage" id="itemsPerPage" onChange={setItemsPerPage}>
           <option value="4">4 per page</option>
           <option value="10">10 per page</option>
         </select>

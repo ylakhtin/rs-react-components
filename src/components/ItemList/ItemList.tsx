@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { NavLink, Outlet, useParams } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate, useParams } from 'react-router-dom';
 import classes from './ItemList.module.css';
 import { queryItems } from '../API/API';
 import Paginator from '../Paginator/Paginator';
@@ -13,7 +13,9 @@ const ItemList = function () {
   // query parameters:
   const [searchText, setSearchText] = useState('');
   const [pageNumber, setPageNumber] = useState(1);
-  const [maxPage] = useState(500);
+  const [perPage, setPerPage] = useState(4);
+
+  const navigate = useNavigate();
 
   const {
     pageNum = 1,
@@ -26,7 +28,8 @@ const ItemList = function () {
 
       const [requestOKCandidate, beerListCandidate] = await queryItems(
         searchText,
-        pageNumber
+        pageNumber,
+        perPage
       );
 
       setRequestOK(requestOKCandidate);
@@ -36,12 +39,8 @@ const ItemList = function () {
 
       setIsLoading(false);
     },
-    [searchText]
+    [perPage, searchText]
   );
-
-  // useEffect(() => {
-
-  // }, []);
 
   useEffect(() => {
     if (searchStr) {
@@ -59,17 +58,19 @@ const ItemList = function () {
   }, [pageNumber, searchText, queryData]);
 
   async function prevPage(): Promise<void> {
-    if (pageNumber - 1 >= 1) {
-      setPageNumber(pageNumber - 1);
+    if (searchText) {
+      navigate(`/page/${pageNumber - 1}/search/${searchText}`);
+    } else {
+      navigate(`/page/${pageNumber - 1}`);
     }
-    // await queryData(pageNumber);
   }
 
   async function nextPage(): Promise<void> {
-    if (pageNumber + 1 <= maxPage) {
-      setPageNumber(pageNumber + 1);
+    if (searchText) {
+      navigate(`/page/${pageNumber + 1}/search/${searchText}`);
+    } else {
+      navigate(`/page/${pageNumber + 1}`);
     }
-    // await queryData(pageNumber);
   }
 
   return (
@@ -128,6 +129,7 @@ const ItemList = function () {
         prevPage={prevPage}
         nextPage={nextPage}
         setPageNum={setPageNumber}
+        setPerPage={setPerPage}
         pageNumber={pageNumber}
         searchString={searchText}
       />
