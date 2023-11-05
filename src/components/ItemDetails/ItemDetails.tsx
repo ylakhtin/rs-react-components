@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import classes from './ItemDetails.module.css';
 import { queryItem } from '../API/API';
 import { IBeerDetails } from '../ItemList/data';
@@ -19,12 +19,19 @@ const ItemDetails = function () {
 
   return (
     <div className={classes.wrapper}>
-      <div>
-        <span>Description: </span> {itemData[0].description}
+      <div className={classes.closeButton}>
+        <NavLink to="..">
+          <button>Close</button>
+        </NavLink>
       </div>
-      <div>
-        <span>Brewed first: </span>
-        {itemData[0].first_brewed}
+      <div className={classes.dataContainer}>
+        <div>
+          <span>Description: </span> {itemData[0].description}
+        </div>
+        <div>
+          <span>Brewed first: </span>
+          {itemData[0].first_brewed}
+        </div>
       </div>
     </div>
   );

@@ -8,6 +8,7 @@ function Paginator(props: {
   nextPage: () => void;
   setPageNum: React.Dispatch<React.SetStateAction<number>>;
   setPerPage: React.Dispatch<React.SetStateAction<number>>;
+  perPage: number;
   pageNumber: number;
   searchString: string;
   isLoading: boolean;
@@ -69,8 +70,10 @@ function Paginator(props: {
           <div className={classes.itemsPerPage}>
             <span>Items amount: </span>
             <select name="perPage" id="itemsPerPage" onChange={setItemsPerPage}>
-              <option value="4">4 per page</option>
-              <option value="10">10 per page</option>
+              <option value={props.perPage}>{props.perPage} per page</option>
+              <option value={props.perPage === 4 ? 10 : 4}>
+                {props.perPage === 4 ? 10 : 4} per page
+              </option>
             </select>
           </div>
           <div ref={messageRef} className={classes.message}>

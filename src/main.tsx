@@ -15,11 +15,18 @@ import ItemList from './components/ItemList/ItemList';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-      <Route path="beers" element={<ItemList />}>
+      {/* <Route path="beers" element={<ItemList />}>
         <Route path="/beers/details/:index" element={<ItemDetails />} />
+      </Route> */}
+      <Route path="/page/:pageNum" element={<ItemList />}>
+        <Route path="/page/:pageNum/details/:index" element={<ItemDetails />} />
       </Route>
-      <Route path="/page/:pageNum/search/:searchStr" element={<ItemList />} />
-      <Route path="/page/:pageNum" element={<ItemList />} />
+      <Route path="/page/:pageNum/search/:searchStr" element={<ItemList />}>
+        <Route
+          path="/page/:pageNum/search/:searchStr/details/:index"
+          element={<ItemDetails />}
+        />
+      </Route>
     </Route>
   )
 );

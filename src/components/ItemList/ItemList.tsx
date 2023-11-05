@@ -10,7 +10,8 @@ const ItemList = function () {
   const [beerList, setBeerList] = useState(EMPTY_ITEMS_ARRAY);
   const [isLoading, setIsLoading] = useState(false);
   const [requestOK, setRequestOK] = useState(true);
-  // query parameters:
+  const [sectionOpen, setSectionOpen] = useState(false);
+  // query parameters
   const [searchText, setSearchText] = useState('');
   const [pageNumber, setPageNumber] = useState(1);
   const [perPage, setPerPage] = useState(4);
@@ -20,6 +21,7 @@ const ItemList = function () {
   const {
     pageNum = 1,
     searchStr = localStorage.getItem(SEARCH_DEFAULT) || '',
+    index,
   } = useParams();
 
   const queryData = useCallback(
@@ -73,6 +75,16 @@ const ItemList = function () {
     }
   }
 
+  function closeRightSection() {
+    console.log(index);
+
+    if (!index) {
+      setSectionOpen(true);
+    } else {
+      setSectionOpen(false);
+    }
+  }
+
   return (
     <div>
       <div className={classes.container}>
@@ -98,10 +110,26 @@ const ItemList = function () {
                 ) : (
                   beerList.map((beer, index) => (
                     <NavLink
-                      to={`/beers/details/${Number(beerList[index].id)}`}
+                      to={
+                        searchText
+                          ? `/page/${pageNumber}/search/${searchText}${
+                              sectionOpen
+                                ? ``
+                                : `/details/${Number(beerList[index].id)}`
+                            }`
+                          : `/page/${pageNumber}${
+                              sectionOpen
+                                ? ``
+                                : `/details/${Number(beerList[index].id)}`
+                            }`
+                      }
                       key={beerList[index].id}
                     >
-                      <div className={classes.flexContainer} key={index}>
+                      <div
+                        className={classes.flexContainer}
+                        key={index}
+                        onClick={closeRightSection}
+                      >
                         <div className={classes.imageContainer}>
                           <img
                             className={classes.itemImage}
@@ -130,6 +158,7 @@ const ItemList = function () {
         nextPage={nextPage}
         setPageNum={setPageNumber}
         setPerPage={setPerPage}
+        perPage={perPage}
         pageNumber={pageNumber}
         searchString={searchText}
         isLoading={isLoading}
