@@ -1,0 +1,27 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  flex-shrink: 0;
+  flex-basis: 40%;
+  margin: 1rem;
+  padding: 1rem;
+  font-size: 1.5rem;
+  border: 1px dotted teal;
+}
+
+span {
+  font-size: 1.5rem;
+  color: teal;
+}
+
+.closeButton {
+  text-align: end;
+}
+
+.dataContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 1rem;
+}

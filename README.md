@@ -1,2 +1,2 @@
-# rs-react-components
+# React + TypeScript + Vite
 RSS React course. Components.
