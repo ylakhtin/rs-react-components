@@ -56,15 +56,6 @@ a {
   text-decoration: none;
 }
 
-.loader {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  font-size: 2rem;
-}
-
 .filler {
   flex: 1;
 }

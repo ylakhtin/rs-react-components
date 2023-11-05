@@ -1,11 +1,16 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, createContext } from 'react';
 import { NavLink, Outlet, useNavigate, useParams } from 'react-router-dom';
 import classes from './ItemList.module.css';
-import { queryItems } from '../API/API';
 import Paginator from '../Paginator/Paginator';
+import Loader from '../Loader/Loader';
+import { queryItems } from '../API/API';
 import { EMPTY_ITEMS_ARRAY } from './data';
 import { SEARCH_DEFAULT } from '../../data';
 import { MAX_AMOUNT } from '../../data';
+
+export const DataFromChildContext = createContext<React.Dispatch<
+  React.SetStateAction<boolean>
+> | null>(null);
 
 const ItemList = function () {
   const [beerList, setBeerList] = useState(EMPTY_ITEMS_ARRAY);
@@ -107,9 +112,7 @@ const ItemList = function () {
             ) : (
               <div>
                 {isLoading ? (
-                  <div className={classes.loader}>
-                    <div>Loading, please wait...</div>
-                  </div>
+                  <Loader />
                 ) : (
                   beerList.map((beer, index) => (
                     <NavLink
@@ -154,7 +157,9 @@ const ItemList = function () {
             )}
           </div>
         </div>
-        <Outlet />
+        <DataFromChildContext.Provider value={setSectionOpen}>
+          <Outlet />
+        </DataFromChildContext.Provider>
       </div>
       <Paginator
         prevPage={prevPage}
