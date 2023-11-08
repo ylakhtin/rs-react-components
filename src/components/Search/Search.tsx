@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import classes from './Search.module.css';
-import { SEARCH_DEFAULT } from '../../shared/data/data';
 import { NavLink } from 'react-router-dom';
+import classes from './Search.module.css';
 import Logo from '../Logo/Logo';
+import { SEARCH_DEFAULT } from '../../shared/data/data';
 
 const Search = function () {
   const [inputValue, setInputValue] = useState(

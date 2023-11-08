@@ -5,8 +5,8 @@ import {
   PER_PAGE,
   BEER_NAME,
   SINGLE_BEER,
-} from './data';
-import { IBeerDetails } from '../ItemList/data';
+  IBeerDetails,
+} from '../../shared/data/data';
 
 function buildQueryString(
   searchString: string | null,

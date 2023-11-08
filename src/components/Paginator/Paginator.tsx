@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import classes from './Paginator.module.css';
-import ENTER_MESSAGE from './data';
+import { ENTER_MESSAGE } from '../../shared/data/data';
 
 function Paginator(props: {
   prevPage: () => void;

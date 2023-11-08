@@ -4,7 +4,7 @@ import classes from './ItemList.module.css';
 import Paginator from '../Paginator/Paginator';
 import Loader from '../Loader/Loader';
 import { queryItems } from '../API/API';
-import { EMPTY_ITEMS_ARRAY } from './data';
+import { EMPTY_ITEMS_ARRAY } from '../../shared/data/data';
 import { SEARCH_DEFAULT } from '../../shared/data/data';
 import { MAX_AMOUNT } from '../../shared/data/data';
 
