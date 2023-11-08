@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import classes from './Search.module.css';
-import { SEARCH_DEFAULT } from '../../data';
+import { SEARCH_DEFAULT } from '../../shared/data/data';
 import { NavLink } from 'react-router-dom';
 import Logo from '../Logo/Logo';
 
