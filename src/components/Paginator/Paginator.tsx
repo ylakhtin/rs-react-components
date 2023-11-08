@@ -40,6 +40,13 @@ function Paginator(props: {
         setMessage('');
       }
       props.setPageNum(page);
+
+      let url = '/page/' + page;
+
+      if (props.searchString) {
+        url += '/search/' + props.searchString;
+      }
+      navigate(url);
     }
   }
 

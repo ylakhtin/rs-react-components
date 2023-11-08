@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, createContext } from 'react';
-import { NavLink, Outlet, useNavigate, useParams } from 'react-router-dom';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import classes from './ItemList.module.css';
 import Paginator from '../Paginator/Paginator';
 import Loader from '../Loader/Loader';
@@ -7,6 +7,8 @@ import { queryItems } from '../API/API';
 import { EMPTY_ITEMS_ARRAY } from '../../shared/data/data';
 import { SEARCH_DEFAULT } from '../../shared/data/data';
 import { MAX_AMOUNT } from '../../shared/data/data';
+import Item from '../Item/Item';
+import Matches from '../Matches/Matches';
 
 export const DataFromChildContext = createContext<React.Dispatch<
   React.SetStateAction<boolean>
@@ -97,63 +99,28 @@ const ItemList = function () {
     <div className={classes.mainContainer}>
       <div className={classes.container}>
         <div className={classes.wrapper}>
-          <div>
-            {!beerList.length || !requestOK ? (
-              <div className={classes.matches}>No matches found</div>
-            ) : (
-              <div className={classes.matches}>
-                Matches on this page: {beerList.length}
-              </div>
-            )}
-          </div>
+          <Matches listLength={beerList.length} requestOK={requestOK} />
           <div className={classes.filler}>
-            {!requestOK ? (
-              <div className={classes.loader}>Bad request</div>
-            ) : (
+            {requestOK ? (
               <div>
                 {isLoading ? (
                   <Loader />
                 ) : (
                   beerList.map((beer, index) => (
-                    <NavLink
-                      to={
-                        searchText
-                          ? `/page/${pageNumber}/search/${searchText}${
-                              sectionOpen
-                                ? ``
-                                : `/details/${Number(beerList[index].id)}`
-                            }`
-                          : `/page/${pageNumber}${
-                              sectionOpen
-                                ? ``
-                                : `/details/${Number(beerList[index].id)}`
-                            }`
-                      }
+                    <Item
+                      setRightSectionState={setRightSectionState}
+                      beer={beer}
+                      searchText={searchText}
+                      pageNumber={pageNumber}
+                      sectionOpen={sectionOpen}
+                      id={beerList[index].id}
                       key={beerList[index].id}
-                    >
-                      <div
-                        className={classes.flexContainer}
-                        key={index}
-                        onClick={setRightSectionState}
-                      >
-                        <div className={classes.imageContainer}>
-                          <img
-                            className={classes.itemImage}
-                            key={index}
-                            src={beer.image_url}
-                            alt={beer.name}
-                          />
-                        </div>
-                        <div className={classes.dataContainer}>
-                          <div>{beer.name}</div>
-                          <div>{beer.tagline}</div>
-                          <div>Volume: {beer.abv}%</div>
-                        </div>
-                      </div>
-                    </NavLink>
+                    />
                   ))
                 )}
               </div>
+            ) : (
+              <div className={classes.loader}>Bad request</div>
             )}
           </div>
         </div>

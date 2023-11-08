@@ -23,39 +23,6 @@ a {
   flex-grow: 1;
 }
 
-.matches {
-  font-size: 1.5rem;
-  color: teal;
-}
-
-.flexContainer {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-  border-bottom: 1px solid teal;
-  margin: 1rem 0;
-  font-size: 1.2rem;
-  cursor: pointer;
-}
-
-.imageContainer {
-  min-width: 6rem;
-  text-align: center;
-}
-
-.itemImage {
-  max-width: 5rem;
-  max-height: 10rem;
-}
-
-.dataContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  text-decoration: none;
-}
-
 .filler {
   flex: 1;
 }
