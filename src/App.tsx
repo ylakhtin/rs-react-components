@@ -1,22 +1,33 @@
-import Search from './components/Search/Search';
-import { Outlet } from 'react-router-dom';
-import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
+import {
+  Navigate,
+  Route,
+  RouterProvider,
+  createBrowserRouter,
+  createRoutesFromElements,
+} from 'react-router-dom';
+import MainLayout from './components/MainLayout/MainLayout';
+import ItemDetails from './components/ItemDetails/ItemDetails';
+import ItemList from './components/ItemList/ItemList';
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<MainLayout />}>
+      <Route index element={<Navigate to="/page/1" />} />
+      <Route path="/page/:pageNum" element={<ItemList />}>
+        <Route path="/page/:pageNum/details/:index" element={<ItemDetails />} />
+      </Route>
+      <Route path="/page/:pageNum/search/:searchStr" element={<ItemList />}>
+        <Route
+          path="/page/:pageNum/search/:searchStr/details/:index"
+          element={<ItemDetails />}
+        />
+      </Route>
+    </Route>
+  )
+);
 
 const App = function () {
-  return (
-    <div className="main-space">
-      <ErrorBoundary
-        fallback={
-          'Error, please, reload the page! This is to test Error boundary! This is a fallback message!'
-        }
-      >
-        <div className="wrapper">
-          <Search />
-        </div>
-        <Outlet />
-      </ErrorBoundary>
-    </div>
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default App;
