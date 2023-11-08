@@ -4,9 +4,13 @@ import classes from './ItemList.module.css';
 import Paginator from '../Paginator/Paginator';
 import Loader from '../Loader/Loader';
 import { queryItems } from '../API/API';
-import { EMPTY_ITEMS_ARRAY } from '../../shared/data/data';
-import { SEARCH_DEFAULT } from '../../shared/data/data';
-import { MAX_AMOUNT } from '../../shared/data/data';
+import {
+  EMPTY_ITEMS_ARRAY,
+  SEARCH_DEFAULT,
+  MAX_AMOUNT,
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_ITEMS_PER_PAGE,
+} from '../../shared/data/data';
 import Item from '../Item/Item';
 import Matches from '../Matches/Matches';
 
@@ -20,13 +24,13 @@ const ItemList = function () {
   const [requestOK, setRequestOK] = useState(true);
   const [sectionOpen, setSectionOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
-  const [pageNumber, setPageNumber] = useState(1);
-  const [perPage, setPerPage] = useState(4);
+  const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
+  const [perPage, setPerPage] = useState(DEFAULT_ITEMS_PER_PAGE);
 
   const navigate = useNavigate();
 
   const {
-    pageNum = 1,
+    pageNum = DEFAULT_PAGE_NUMBER,
     searchStr = localStorage.getItem(SEARCH_DEFAULT) || '',
     index,
   } = useParams();

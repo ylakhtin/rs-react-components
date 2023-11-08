@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import classes from './Paginator.module.css';
-import { ENTER_MESSAGE } from '../../shared/data/data';
+import {
+  ENTER_MESSAGE,
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_ITEMS_PER_PAGE,
+  ITEMS_PER_PAGE,
+} from '../../shared/data/data';
 
 function Paginator(props: {
   prevPage: () => void;
@@ -53,9 +58,9 @@ function Paginator(props: {
   function setItemsPerPage(event: React.ChangeEvent<HTMLSelectElement>) {
     props.setPerPage(Number(event.target.value));
     if (props.searchString) {
-      navigate(`/page/${1}/search/${props.searchString}`);
+      navigate(`/page/${DEFAULT_PAGE_NUMBER}/search/${props.searchString}`);
     } else {
-      navigate(`/page/${1}`);
+      navigate(`/page/${DEFAULT_PAGE_NUMBER}`);
     }
   }
 
@@ -81,8 +86,17 @@ function Paginator(props: {
             <span>Items amount: </span>
             <select name="perPage" id="itemsPerPage" onChange={setItemsPerPage}>
               <option value={props.perPage}>{props.perPage} per page</option>
-              <option value={props.perPage === 4 ? 10 : 4}>
-                {props.perPage === 4 ? 10 : 4} per page
+              <option
+                value={
+                  props.perPage === DEFAULT_ITEMS_PER_PAGE
+                    ? ITEMS_PER_PAGE
+                    : DEFAULT_ITEMS_PER_PAGE
+                }
+              >
+                {props.perPage === DEFAULT_ITEMS_PER_PAGE
+                  ? ITEMS_PER_PAGE
+                  : DEFAULT_ITEMS_PER_PAGE}{' '}
+                per page
               </option>
             </select>
           </div>

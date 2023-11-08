@@ -5,6 +5,8 @@ import {
   PER_PAGE,
   BEER_NAME,
   SINGLE_BEER,
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_ITEMS_PER_PAGE,
   IBeerDetails,
 } from '../../shared/data/data';
 
@@ -54,8 +56,8 @@ async function sendGetQuery(
 
 async function queryItems(
   searchString: string | null,
-  pageNumber: number = 1,
-  perPage: number = 4
+  pageNumber: number = DEFAULT_PAGE_NUMBER,
+  perPage: number = DEFAULT_ITEMS_PER_PAGE
 ): Promise<[boolean, IBeerDetails[] | Error]> {
   const queryString = buildQueryString(searchString, pageNumber, perPage);
   let requestOK: boolean;
