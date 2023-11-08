@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
-import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import {
   Navigate,
   Route,
@@ -32,12 +31,6 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ErrorBoundary
-      fallback={
-        'Error, please, reload the page! This is to test Error boundary! This is a fallback message!'
-      }
-    >
-      <RouterProvider router={router} />
-    </ErrorBoundary>
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
