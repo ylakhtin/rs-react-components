@@ -1,20 +1,24 @@
 import { NavLink } from 'react-router-dom';
 import classes from './Item.module.css';
-import { IBeerDetails } from '../../shared/data/data';
+import { IBeerDetails, IGeneralContext } from '../../shared/data/data';
+import { useContext } from 'react';
+import { GeneralContext } from '../MainLayout/MainLayout';
 
 const Item = function (props: {
   setRightSectionState: () => void;
   beer: IBeerDetails;
-  searchText: string;
+  // searchText: string;
   pageNumber: number;
   sectionOpen: boolean;
   id: number;
 }) {
+  const genContext: IGeneralContext | null = useContext(GeneralContext);
+
   function getURL(): string {
     let url = '/page/' + props.pageNumber;
 
-    if (props.searchText) {
-      url += '/search/' + props.searchText;
+    if (genContext?.mainString) {
+      url += '/search/' + genContext?.mainString;
     }
 
     if (!props.sectionOpen) {

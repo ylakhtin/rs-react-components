@@ -61,6 +61,11 @@ export interface IBeerDetails {
   contributed_by: string;
 }
 
+export interface IGeneralContext {
+  mainString: string;
+  setMainString: React.Dispatch<React.SetStateAction<string>>;
+}
+
 export {
   EMPTY_ITEMS_ARRAY,
   ROOT_ENDPOINT,

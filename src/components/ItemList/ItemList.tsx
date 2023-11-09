@@ -1,4 +1,10 @@
-import { useState, useEffect, useCallback, createContext } from 'react';
+import {
+  useState,
+  useEffect,
+  useCallback,
+  createContext,
+  useContext,
+} from 'react';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import classes from './ItemList.module.css';
 import Paginator from '../Paginator/Paginator';
@@ -10,9 +16,11 @@ import {
   MAX_AMOUNT,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_ITEMS_PER_PAGE,
+  IGeneralContext,
 } from '../../shared/data/data';
 import Item from '../Item/Item';
 import Matches from '../Matches/Matches';
+import { GeneralContext } from '../MainLayout/MainLayout';
 
 export const DataFromChildContext = createContext<React.Dispatch<
   React.SetStateAction<boolean>
@@ -23,7 +31,6 @@ const ItemList = function () {
   const [isLoading, setIsLoading] = useState(false);
   const [requestOK, setRequestOK] = useState(true);
   const [sectionOpen, setSectionOpen] = useState(false);
-  const [searchText, setSearchText] = useState('');
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
   const [perPage, setPerPage] = useState(DEFAULT_ITEMS_PER_PAGE);
 
@@ -35,12 +42,14 @@ const ItemList = function () {
     index,
   } = useParams();
 
+  const genContext: IGeneralContext | null = useContext(GeneralContext);
+
   const queryData = useCallback(
     async (pageNumber: number) => {
       setIsLoading(true);
 
       const [requestOKCandidate, beerListCandidate] = await queryItems(
-        searchText,
+        genContext?.mainString as string,
         pageNumber,
         perPage
       );
@@ -52,28 +61,28 @@ const ItemList = function () {
 
       setIsLoading(false);
     },
-    [perPage, searchText]
+    [genContext?.mainString, perPage]
   );
 
   useEffect(() => {
     if (searchStr) {
-      setSearchText(searchStr);
+      genContext?.setMainString(searchStr);
     } else {
-      setSearchText('');
+      genContext?.setMainString('');
     }
     if (pageNum) {
       setPageNumber(Number(pageNum));
     }
-  }, [pageNum, searchStr]);
+  }, [genContext, pageNum, searchStr]);
 
   useEffect(() => {
     queryData(pageNumber);
-  }, [pageNumber, searchText, queryData]);
+  }, [pageNumber, genContext?.mainString, queryData]);
 
   async function prevPage(): Promise<void> {
     if (pageNumber - 1 >= 1) {
-      if (searchText) {
-        navigate(`/page/${pageNumber - 1}/search/${searchText}`);
+      if (genContext?.mainString) {
+        navigate(`/page/${pageNumber - 1}/search/${genContext?.mainString}`);
       } else {
         navigate(`/page/${pageNumber - 1}`);
       }
@@ -83,8 +92,8 @@ const ItemList = function () {
   async function nextPage(): Promise<void> {
     const limit = Math.ceil(MAX_AMOUNT / perPage);
     if (pageNumber + 1 <= limit) {
-      if (searchText) {
-        navigate(`/page/${pageNumber + 1}/search/${searchText}`);
+      if (genContext?.mainString) {
+        navigate(`/page/${pageNumber + 1}/search/${genContext?.mainString}`);
       } else {
         navigate(`/page/${pageNumber + 1}`);
       }
@@ -114,7 +123,6 @@ const ItemList = function () {
                     <Item
                       setRightSectionState={setRightSectionState}
                       beer={beer}
-                      searchText={searchText}
                       pageNumber={pageNumber}
                       sectionOpen={sectionOpen}
                       id={beerList[index].id}
@@ -139,7 +147,6 @@ const ItemList = function () {
         setPerPage={setPerPage}
         perPage={perPage}
         pageNumber={pageNumber}
-        searchString={searchText}
         isLoading={isLoading}
       />
     </div>

@@ -1,13 +1,16 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import classes from './Search.module.css';
 import Logo from '../Logo/Logo';
-import { SEARCH_DEFAULT } from '../../shared/data/data';
+import { IGeneralContext, SEARCH_DEFAULT } from '../../shared/data/data';
+import { GeneralContext } from '../MainLayout/MainLayout';
 
 const Search = function () {
   const [inputValue, setInputValue] = useState(
     localStorage.getItem(SEARCH_DEFAULT) || ''
   );
+
+  const genContext: IGeneralContext | null = useContext(GeneralContext);
 
   function setValue(searchString: string) {
     setInputValue(searchString);
@@ -15,6 +18,9 @@ const Search = function () {
 
   function setSearchStringInApp() {
     localStorage.setItem(SEARCH_DEFAULT, inputValue);
+    if (genContext && genContext.setMainString) {
+      genContext.setMainString(inputValue);
+    }
   }
 
   return (

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import classes from './Paginator.module.css';
 import {
@@ -6,7 +6,9 @@ import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_ITEMS_PER_PAGE,
   ITEMS_PER_PAGE,
+  IGeneralContext,
 } from '../../shared/data/data';
+import { GeneralContext } from '../MainLayout/MainLayout';
 
 function Paginator(props: {
   prevPage: () => void;
@@ -15,7 +17,6 @@ function Paginator(props: {
   setPerPage: React.Dispatch<React.SetStateAction<number>>;
   perPage: number;
   pageNumber: number;
-  searchString: string;
   isLoading: boolean;
 }) {
   const [page, setPage] = useState(props.pageNumber);
@@ -23,6 +24,7 @@ function Paginator(props: {
   const [message, setMessage] = useState('');
   const messageRef = useRef(null);
   const navigate = useNavigate();
+  const genContext: IGeneralContext | null = useContext(GeneralContext);
 
   useEffect(() => {
     setPage(props.pageNumber);
@@ -48,8 +50,8 @@ function Paginator(props: {
 
       let url = '/page/' + page;
 
-      if (props.searchString) {
-        url += '/search/' + props.searchString;
+      if (genContext?.mainString) {
+        url += '/search/' + genContext?.mainString;
       }
       navigate(url);
     }
@@ -57,8 +59,8 @@ function Paginator(props: {
 
   function setItemsPerPage(event: React.ChangeEvent<HTMLSelectElement>) {
     props.setPerPage(Number(event.target.value));
-    if (props.searchString) {
-      navigate(`/page/${DEFAULT_PAGE_NUMBER}/search/${props.searchString}`);
+    if (genContext?.mainString) {
+      navigate(`/page/${DEFAULT_PAGE_NUMBER}/search/${genContext?.mainString}`);
     } else {
       navigate(`/page/${DEFAULT_PAGE_NUMBER}`);
     }

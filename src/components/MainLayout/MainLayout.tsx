@@ -1,9 +1,17 @@
 import { Outlet } from 'react-router-dom';
+import { createContext, useState } from 'react';
 import classes from './MainLayout.module.css';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import Search from '../Search/Search';
+import { IGeneralContext, SEARCH_DEFAULT } from '../../shared/data/data';
+
+export const GeneralContext = createContext<IGeneralContext | null>(null);
 
 const MainLayout = function () {
+  const [mainString, setMainString] = useState(
+    localStorage.getItem(SEARCH_DEFAULT) || ''
+  );
+
   return (
     <div className={classes.mainSpace}>
       <ErrorBoundary
@@ -12,9 +20,13 @@ const MainLayout = function () {
         }
       >
         <div className="wrapper">
-          <Search />
+          <GeneralContext.Provider value={{ mainString, setMainString }}>
+            <Search />
+          </GeneralContext.Provider>
         </div>
-        <Outlet />
+        <GeneralContext.Provider value={{ mainString, setMainString }}>
+          <Outlet />
+        </GeneralContext.Provider>
       </ErrorBoundary>
     </div>
   );
