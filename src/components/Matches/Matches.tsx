@@ -4,11 +4,11 @@ function Matches(props: { listLength: number; requestOK: boolean }) {
   return (
     <div>
       {props.listLength && props.requestOK ? (
-        <div className={classes.matches}>
+        <span className={classes.matches}>
           Matches on this page: {props.listLength}
-        </div>
+        </span>
       ) : (
-        <div className={classes.matches}>No matches found</div>
+        <span className={classes.matches}>No matches found</span>
       )}
     </div>
   );
