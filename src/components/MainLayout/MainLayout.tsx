@@ -3,7 +3,11 @@ import { createContext, useState } from 'react';
 import classes from './MainLayout.module.css';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import Search from '../Search/Search';
-import { IGeneralContext, SEARCH_DEFAULT } from '../../shared/data/data';
+import {
+  EMPTY_ITEMS_ARRAY,
+  SEARCH_DEFAULT,
+  IGeneralContext,
+} from '../../shared/data/data';
 
 export const GeneralContext = createContext<IGeneralContext | null>(null);
 
@@ -11,6 +15,7 @@ const MainLayout = function () {
   const [mainString, setMainString] = useState(
     localStorage.getItem(SEARCH_DEFAULT) || ''
   );
+  const [beerList, setBeerList] = useState(EMPTY_ITEMS_ARRAY);
 
   return (
     <div className={classes.mainSpace}>
@@ -19,12 +24,12 @@ const MainLayout = function () {
           'Error, please, reload the page! This is to test Error boundary! This is a fallback message!'
         }
       >
-        <div className="wrapper">
-          <GeneralContext.Provider value={{ mainString, setMainString }}>
+        <GeneralContext.Provider
+          value={{ mainString, setMainString, beerList, setBeerList }}
+        >
+          <div className="wrapper">
             <Search />
-          </GeneralContext.Provider>
-        </div>
-        <GeneralContext.Provider value={{ mainString, setMainString }}>
+          </div>
           <Outlet />
         </GeneralContext.Provider>
       </ErrorBoundary>

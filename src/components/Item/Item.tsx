@@ -7,7 +7,6 @@ import { GeneralContext } from '../MainLayout/MainLayout';
 const Item = function (props: {
   setRightSectionState: () => void;
   beer: IBeerDetails;
-  // searchText: string;
   pageNumber: number;
   sectionOpen: boolean;
   id: number;

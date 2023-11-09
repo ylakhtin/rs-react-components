@@ -64,6 +64,8 @@ export interface IBeerDetails {
 export interface IGeneralContext {
   mainString: string;
   setMainString: React.Dispatch<React.SetStateAction<string>>;
+  beerList: IBeerDetails[];
+  setBeerList: React.Dispatch<React.SetStateAction<IBeerDetails[]>>;
 }
 
 export {

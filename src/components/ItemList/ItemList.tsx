@@ -11,7 +11,6 @@ import Paginator from '../Paginator/Paginator';
 import Loader from '../Loader/Loader';
 import { queryItems } from '../API/API';
 import {
-  EMPTY_ITEMS_ARRAY,
   SEARCH_DEFAULT,
   MAX_AMOUNT,
   DEFAULT_PAGE_NUMBER,
@@ -27,7 +26,6 @@ export const DataFromChildContext = createContext<React.Dispatch<
 > | null>(null);
 
 const ItemList = function () {
-  const [beerList, setBeerList] = useState(EMPTY_ITEMS_ARRAY);
   const [isLoading, setIsLoading] = useState(false);
   const [requestOK, setRequestOK] = useState(true);
   const [sectionOpen, setSectionOpen] = useState(false);
@@ -56,11 +54,12 @@ const ItemList = function () {
 
       setRequestOK(requestOKCandidate);
       if (Array.isArray(beerListCandidate)) {
-        setBeerList(beerListCandidate);
+        genContext?.setBeerList(beerListCandidate);
       }
 
       setIsLoading(false);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [genContext?.mainString, perPage]
   );
 
@@ -112,21 +111,24 @@ const ItemList = function () {
     <div className={classes.mainContainer}>
       <div className={classes.container}>
         <div className={classes.wrapper}>
-          <Matches listLength={beerList.length} requestOK={requestOK} />
+          <Matches
+            listLength={genContext?.beerList.length as number}
+            requestOK={requestOK}
+          />
           <div className={classes.filler}>
             {requestOK ? (
               <div>
                 {isLoading ? (
                   <Loader />
                 ) : (
-                  beerList.map((beer, index) => (
+                  genContext?.beerList.map((beer, index) => (
                     <Item
                       setRightSectionState={setRightSectionState}
                       beer={beer}
                       pageNumber={pageNumber}
                       sectionOpen={sectionOpen}
-                      id={beerList[index].id}
-                      key={beerList[index].id}
+                      id={genContext?.beerList[index].id}
+                      key={genContext?.beerList[index].id}
                     />
                   ))
                 )}
