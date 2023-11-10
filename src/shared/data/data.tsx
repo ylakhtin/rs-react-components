@@ -11,6 +11,7 @@ const SINGLE_BEER: string = 'https://api.punkapi.com/v2/beers/';
 const DEFAULT_PAGE_NUMBER = 1;
 const DEFAULT_ITEMS_PER_PAGE = 4;
 const ITEMS_PER_PAGE = 10;
+const SEARCH_PLACEHOLDER_TEXT = 'Input search string here...';
 const EMPTY_ITEMS_ARRAY: IBeerDetails[] = [
   {
     id: 0,
@@ -82,4 +83,5 @@ export {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_ITEMS_PER_PAGE,
   ITEMS_PER_PAGE,
+  SEARCH_PLACEHOLDER_TEXT,
 };

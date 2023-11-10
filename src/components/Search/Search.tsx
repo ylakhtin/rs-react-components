@@ -2,7 +2,11 @@ import { useContext, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import classes from './Search.module.css';
 import Logo from '../Logo/Logo';
-import { IGeneralContext, SEARCH_DEFAULT } from '../../shared/data/data';
+import {
+  IGeneralContext,
+  SEARCH_DEFAULT,
+  SEARCH_PLACEHOLDER_TEXT,
+} from '../../shared/data/data';
 import { GeneralContext } from '../MainLayout/MainLayout';
 
 const Search = function () {
@@ -31,7 +35,7 @@ const Search = function () {
         onChange={(event) => setValue(event.target.value)}
         value={inputValue}
         className={classes.searchInput}
-        placeholder="Input search string here..."
+        placeholder={SEARCH_PLACEHOLDER_TEXT}
       />
       <NavLink
         to={inputValue ? `/page/1/search/${inputValue}` : '/page/1'}
