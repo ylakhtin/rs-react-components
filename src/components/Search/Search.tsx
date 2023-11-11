@@ -22,7 +22,7 @@ const Search = function () {
 
   function setSearchStringInApp() {
     localStorage.setItem(SEARCH_DEFAULT, inputValue);
-    if (genContext && genContext.setMainString) {
+    if (genContext) {
       genContext.setMainString(inputValue);
     }
   }
