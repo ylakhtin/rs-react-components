@@ -72,14 +72,15 @@ async function queryItems(
 }
 
 async function queryItem(id: number): Promise<IBeerDetails[]> {
+  let result: IBeerDetails[] = [];
   const queryString = SINGLE_BEER + id;
   const responseJSON: IBeerDetails[] | Error = await sendGetQuery(queryString);
 
   if (Array.isArray(responseJSON)) {
-    return responseJSON;
-  } else {
-    return [];
+    result = responseJSON;
   }
+
+  return result;
 }
 
-export { queryItems, queryItem };
+export { queryItems, queryItem, buildQueryString };
