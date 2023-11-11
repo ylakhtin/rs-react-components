@@ -24,7 +24,7 @@ describe('Matches component', () => {
     expect(matches).toBeInTheDocument();
   });
 
-  it('Tests the "No matches found" block. Negative case.', async () => {
+  it('Tests the "Check that an appropriate message is displayed if no cards are present', async () => {
     await render(
       <Matches
         listLength={wrongPayload.listLength}

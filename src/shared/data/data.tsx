@@ -12,6 +12,7 @@ const DEFAULT_PAGE_NUMBER = 1;
 const DEFAULT_ITEMS_PER_PAGE = 4;
 const ITEMS_PER_PAGE = 10;
 const SEARCH_PLACEHOLDER_TEXT = 'Input search string here...';
+const PAGE_NOT_FOUND_MESSAGE = 'The page is not found';
 const EMPTY_ITEMS_ARRAY: IBeerDetails[] = [
   {
     id: 0,
@@ -84,4 +85,5 @@ export {
   DEFAULT_ITEMS_PER_PAGE,
   ITEMS_PER_PAGE,
   SEARCH_PLACEHOLDER_TEXT,
+  PAGE_NOT_FOUND_MESSAGE,
 };

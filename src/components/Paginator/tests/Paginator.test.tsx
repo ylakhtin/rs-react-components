@@ -4,7 +4,7 @@ import App from '../../../App';
 const PAGE_SEGMENT_NUMBER = 2;
 
 describe('Paginator component', () => {
-  it('Component updates URL query parameter when  click next page', async () => {
+  it('Component updates URL query parameter when click next page', async () => {
     await render(<App />);
 
     const buttonElement = await screen.findByRole('button', { name: /Next/i });
@@ -17,7 +17,7 @@ describe('Paginator component', () => {
     expect(pageNum).toEqual(String(PAGE_SEGMENT_NUMBER));
   });
 
-  it('Component updates URL query parameter when  click next page', async () => {
+  it('Component updates URL query parameter when click next page', async () => {
     await render(<App />);
 
     const buttonNextElement = await screen.findByRole('button', {

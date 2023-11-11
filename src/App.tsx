@@ -8,6 +8,7 @@ import {
 import MainLayout from './components/MainLayout/MainLayout';
 import ItemDetails from './components/ItemDetails/ItemDetails';
 import ItemList from './components/ItemList/ItemList';
+import NotFound from './components/NotFound/NotFound';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,6 +23,7 @@ const router = createBrowserRouter(
           element={<ItemDetails />}
         />
       </Route>
+      <Route path="*" element={<NotFound />}></Route>
     </Route>
   )
 );
