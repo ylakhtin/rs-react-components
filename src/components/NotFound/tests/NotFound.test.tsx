@@ -1,11 +1,16 @@
 import { render, screen } from '@testing-library/react';
-import App from '../../../App';
+import { AppRoutes } from '../../../App';
+import { MemoryRouter } from 'react-router-dom';
 
-// const wrongURL = '/abracadabra';
+const wrongPath = '/abracadabra';
 
-it('Tests redirect to NotFound page for wrong route', async () => {
-  render(<App />);
+it('Redirects to NotFound for invalid path', async () => {
+  render(
+    <MemoryRouter initialEntries={[wrongPath]}>
+      <AppRoutes />
+    </MemoryRouter>
+  );
 
-  const errorPage = await screen.findByText(/The page is not found/i);
-  expect(errorPage).not.toBeNull();
+  const notFoundText = await screen.findByText(/The page is not found/i);
+  expect(notFoundText).not.toBeNull();
 });

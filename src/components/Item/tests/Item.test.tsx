@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
-import App from '../../../App';
+import { App } from '../../../App';
 import { queryItem } from '../../API/API';
 import { IBeerDetails, SEARCH_DEFAULT } from '../../../shared/data/data';
 import { beerDetails } from './testData';

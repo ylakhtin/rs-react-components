@@ -1,17 +1,23 @@
+import React from 'react';
 import {
-  Navigate,
+  BrowserRouter as Router,
+  Routes,
   Route,
-  RouterProvider,
-  createBrowserRouter,
-  createRoutesFromElements,
+  Navigate,
 } from 'react-router-dom';
 import MainLayout from './components/MainLayout/MainLayout';
 import ItemDetails from './components/ItemDetails/ItemDetails';
 import ItemList from './components/ItemList/ItemList';
 import NotFound from './components/NotFound/NotFound';
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
+const App = () => (
+  <Router>
+    <AppRoutes />
+  </Router>
+);
+
+const AppRoutes = () => (
+  <Routes>
     <Route path="/" element={<MainLayout />}>
       <Route index element={<Navigate to="/page/1" />} />
       <Route path="/page/:pageNum" element={<ItemList />}>
@@ -23,13 +29,9 @@ const router = createBrowserRouter(
           element={<ItemDetails />}
         />
       </Route>
-      <Route path="*" element={<NotFound />}></Route>
+      <Route path="*" element={<NotFound />} />
     </Route>
-  )
+  </Routes>
 );
 
-const App = function () {
-  return <RouterProvider router={router} />;
-};
-
-export default App;
+export { App, AppRoutes };
