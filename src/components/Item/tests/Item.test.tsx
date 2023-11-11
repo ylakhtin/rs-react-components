@@ -5,11 +5,9 @@ import { queryItem } from '../../API/API';
 import { IBeerDetails, SEARCH_DEFAULT } from '../../../shared/data/data';
 import { beerDetails } from './testData';
 
-localStorage.setItem(SEARCH_DEFAULT, '');
-
 describe('Card component', () => {
   it('Ensure that the card component renders the relevant card data', async () => {
-    localStorage.setItem(SEARCH_DEFAULT, '');
+    localStorage.setItem(SEARCH_DEFAULT, beerDetails.name);
     await render(<App />);
     const regex = new RegExp(`.*${beerDetails.abv}.*`, 'i');
 

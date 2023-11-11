@@ -1,7 +1,9 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { App } from '../../../App';
+import { SEARCH_DEFAULT } from '../../../shared/data/data';
 
 const PAGE_SEGMENT_NUMBER = 2;
+const SEARCH_STRING_TEST = 'a';
 
 describe('Paginator component', () => {
   it('Make sure the component updates URL query parameter when page changes. Next page', async () => {
@@ -36,5 +38,18 @@ describe('Paginator component', () => {
     const pageNum = pathSegments[PAGE_SEGMENT_NUMBER];
 
     expect(pageNum).toEqual(String(PAGE_SEGMENT_NUMBER));
+  });
+
+  it('Checks page change using keyboard', async () => {
+    localStorage.setItem(SEARCH_DEFAULT, SEARCH_STRING_TEST);
+    await render(<App />);
+
+    const inputElement = await screen.findByPlaceholderText('pageNum');
+    fireEvent.change(inputElement, { target: { value: PAGE_SEGMENT_NUMBER } });
+    fireEvent.keyDown(inputElement, { key: 'Enter' });
+
+    expect(window.location.href).toContain(
+      `/page/${PAGE_SEGMENT_NUMBER}/search/${SEARCH_STRING_TEST}`
+    );
   });
 });

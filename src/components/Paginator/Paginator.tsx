@@ -1,8 +1,7 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import classes from './Paginator.module.css';
 import {
-  ENTER_MESSAGE,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_ITEMS_PER_PAGE,
   ITEMS_PER_PAGE,
@@ -20,9 +19,6 @@ function Paginator(props: {
   isLoading: boolean;
 }) {
   const [page, setPage] = useState(props.pageNumber);
-  const [showHint, setShowHint] = useState(false);
-  const [message, setMessage] = useState('');
-  const messageRef = useRef(null);
   const navigate = useNavigate();
   const genContext: IGeneralContext | null = useContext(GeneralContext);
 
@@ -30,22 +26,8 @@ function Paginator(props: {
     setPage(props.pageNumber);
   }, [props.pageNumber]);
 
-  useEffect(() => {
-    if (showHint && messageRef.current) {
-      setMessage(ENTER_MESSAGE);
-    }
-  }, [showHint]);
-
-  function showMessage() {
-    setShowHint(true);
-  }
-
   function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key === 'Enter') {
-      setShowHint(false);
-      if (messageRef.current) {
-        setMessage('');
-      }
       props.setPageNum(page);
 
       let url = '/page/' + page;
@@ -70,16 +52,13 @@ function Paginator(props: {
     <div>
       {!props.isLoading && (
         <div className={classes.mainContainer}>
-          <div ref={messageRef} className={classes.message}>
-            {message}
-          </div>
           <div className={classes.container}>
             <button onClick={props.prevPage}>Prev</button>
             <input
               type="number"
               value={page}
+              placeholder="pageNum"
               onChange={(event) => setPage(Number(event.target.value))}
-              onClick={showMessage}
               onKeyDown={handleKeyPress}
             />
             <button onClick={props.nextPage}>Next</button>
