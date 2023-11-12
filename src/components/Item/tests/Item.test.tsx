@@ -6,17 +6,34 @@ import { queryItem } from '../../API/API';
 import { IBeerDetails, SEARCH_DEFAULT } from '../../../shared/data/data';
 import { beerDetails } from '../../../shared/data/testData';
 
-beforeEach(() => {
-  server.listen();
-});
-
-afterEach(() => {
-  server.close();
-});
-
 describe('Card component', () => {
-  it('Ensure that the card component renders the relevant card data', async () => {
+  beforeEach(() => {
+    server.listen();
+  });
+
+  afterEach(() => {
+    server.close();
+  });
+
+  it('Smoke check', async () => {
+    localStorage.setItem(SEARCH_DEFAULT, '');
+    const app = await render(<App />);
+    expect(app).not.toBeNull();
+  });
+
+  it('Validate that clicking on a card opens a detailed card component', async () => {
     localStorage.setItem(SEARCH_DEFAULT, beerDetails.name);
+    await render(<App />);
+
+    const name = await screen.findByText(beerDetails.name);
+    fireEvent.click(name);
+
+    const descriptionElement = await screen.findByText(beerDetails.description);
+    expect(descriptionElement).not.toBeNull();
+  });
+
+  it('Ensure that the card component renders the relevant card data', async () => {
+    localStorage.setItem(SEARCH_DEFAULT, '');
     await render(<App />);
     const regex = new RegExp(`.*${beerDetails.abv}.*`, 'i');
 
@@ -27,17 +44,6 @@ describe('Card component', () => {
     expect(name.textContent).toEqual(beerDetails.name);
     expect(tagline.textContent).toEqual(beerDetails.tagline);
     expect(volume.textContent).toContain(beerDetails.abv);
-  });
-
-  it('Validate that clicking on a card opens a detailed card component', async () => {
-    localStorage.setItem(SEARCH_DEFAULT, '');
-    await render(<App />);
-
-    const name = await screen.findByText(beerDetails.name);
-    fireEvent.click(name);
-
-    const descriptionElement = await screen.findByText(beerDetails.description);
-    expect(descriptionElement).not.toBeNull();
   });
 
   it('Check that clicking triggers an additional API call to fetch detailed information', async () => {

@@ -3,15 +3,20 @@ import { App } from '../../../App';
 import { server } from '../../MockService/Server';
 import { beerDetails } from '../../../shared/data/testData';
 
-beforeEach(() => {
-  server.listen();
-});
-
-afterEach(() => {
-  server.close();
-});
-
 describe('Card details component', () => {
+  beforeEach(() => {
+    server.listen();
+  });
+
+  afterEach(() => {
+    server.close();
+  });
+
+  it('Smoke check', async () => {
+    const app = await render(<App />);
+    expect(app).not.toBeNull();
+  });
+
   it('Check that a loading indicator is displayed while fetching data', async () => {
     await render(<App />);
 

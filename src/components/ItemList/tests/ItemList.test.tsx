@@ -10,15 +10,15 @@ import {
 / I just put a number of matches into a dedicated component called 'Matches'
 */
 
-beforeEach(() => {
-  server.listen();
-});
-
-afterEach(() => {
-  server.close();
-});
-
 describe('Card List details component', () => {
+  beforeEach(() => {
+    server.listen();
+  });
+
+  afterEach(() => {
+    server.close();
+  });
+
   it('Verify that the component renders the specified number of cards. Test 1.', async () => {
     render(<App />);
 

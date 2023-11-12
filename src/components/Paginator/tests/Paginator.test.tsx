@@ -6,15 +6,15 @@ import { SEARCH_DEFAULT } from '../../../shared/data/data';
 const PAGE_SEGMENT_NUMBER = 2;
 const SEARCH_STRING_TEST = 'a';
 
-beforeEach(() => {
-  server.listen();
-});
-
-afterEach(() => {
-  server.close();
-});
-
 describe('Paginator component', () => {
+  beforeEach(() => {
+    server.listen();
+  });
+
+  afterEach(() => {
+    server.close();
+  });
+
   it('Make sure the component updates URL query parameter when page changes. Next page', async () => {
     await render(<App />);
 
