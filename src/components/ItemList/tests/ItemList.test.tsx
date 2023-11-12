@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { server } from '../../MockService/Server';
 import { App } from '../../../App';
 import {
   DEFAULT_ITEMS_PER_PAGE,
@@ -11,6 +12,8 @@ import {
 
 describe('Card List details component', () => {
   it('Verify that the component renders the specified number of cards. Test 1.', async () => {
+    server.listen();
+
     render(<App />);
 
     // Now we check the amount of cards after a switch from 4 to 10 per page
@@ -38,5 +41,7 @@ describe('Card List details component', () => {
       const itemList = await screen.findAllByText(/Volume:/i);
       expect(itemList.length).toEqual(DEFAULT_ITEMS_PER_PAGE);
     });
+
+    server.close();
   });
 });
