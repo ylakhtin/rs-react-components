@@ -1,73 +1,76 @@
-import { useState, useEffect, useCallback, createContext } from 'react';
-import { NavLink, Outlet, useNavigate, useParams } from 'react-router-dom';
+import { useState, useEffect, createContext, useContext } from 'react';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import classes from './ItemList.module.css';
 import Paginator from '../Paginator/Paginator';
 import Loader from '../Loader/Loader';
 import { queryItems } from '../API/API';
-import { EMPTY_ITEMS_ARRAY } from './data';
-import { SEARCH_DEFAULT } from '../../data';
-import { MAX_AMOUNT } from '../../data';
+import {
+  SEARCH_DEFAULT,
+  MAX_AMOUNT,
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_ITEMS_PER_PAGE,
+  IGeneralContext,
+} from '../../shared/data/data';
+import Item from '../Item/Item';
+import Matches from '../Matches/Matches';
+import { GeneralContext } from '../MainLayout/MainLayout';
 
 export const DataFromChildContext = createContext<React.Dispatch<
   React.SetStateAction<boolean>
 > | null>(null);
 
 const ItemList = function () {
-  const [beerList, setBeerList] = useState(EMPTY_ITEMS_ARRAY);
   const [isLoading, setIsLoading] = useState(false);
   const [requestOK, setRequestOK] = useState(true);
   const [sectionOpen, setSectionOpen] = useState(false);
-  const [searchText, setSearchText] = useState('');
-  const [pageNumber, setPageNumber] = useState(1);
-  const [perPage, setPerPage] = useState(4);
+  const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
+  const [perPage, setPerPage] = useState(DEFAULT_ITEMS_PER_PAGE);
 
   const navigate = useNavigate();
 
   const {
-    pageNum = 1,
+    pageNum = DEFAULT_PAGE_NUMBER,
     searchStr = localStorage.getItem(SEARCH_DEFAULT) || '',
     index,
   } = useParams();
 
-  const queryData = useCallback(
-    async (pageNumber: number) => {
+  const genContext: IGeneralContext | null = useContext(GeneralContext);
+
+  useEffect(() => {
+    if (searchStr) {
+      genContext?.setMainString(searchStr);
+    } else {
+      genContext?.setMainString('');
+    }
+    if (pageNum) {
+      setPageNumber(Number(pageNum));
+    }
+  }, [genContext, pageNum, searchStr]);
+
+  useEffect(() => {
+    (async () => {
       setIsLoading(true);
 
       const [requestOKCandidate, beerListCandidate] = await queryItems(
-        searchText,
+        genContext?.mainString as string,
         pageNumber,
         perPage
       );
 
       setRequestOK(requestOKCandidate);
       if (Array.isArray(beerListCandidate)) {
-        setBeerList(beerListCandidate);
+        genContext?.setBeerList(beerListCandidate);
       }
 
       setIsLoading(false);
-    },
-    [perPage, searchText]
-  );
-
-  useEffect(() => {
-    if (searchStr) {
-      setSearchText(searchStr);
-    } else {
-      setSearchText('');
-    }
-    if (pageNum) {
-      setPageNumber(Number(pageNum));
-    }
-  }, [pageNum, searchStr]);
-
-  useEffect(() => {
-    queryData(pageNumber);
-  }, [pageNumber, searchText, queryData]);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageNumber, genContext?.mainString, perPage]);
 
   async function prevPage(): Promise<void> {
     if (pageNumber - 1 >= 1) {
-      if (searchText) {
-        navigate(`/page/${pageNumber - 1}/search/${searchText}`);
+      if (genContext?.mainString) {
+        navigate(`/page/${pageNumber - 1}/search/${genContext?.mainString}`);
       } else {
         navigate(`/page/${pageNumber - 1}`);
       }
@@ -77,8 +80,8 @@ const ItemList = function () {
   async function nextPage(): Promise<void> {
     const limit = Math.ceil(MAX_AMOUNT / perPage);
     if (pageNumber + 1 <= limit) {
-      if (searchText) {
-        navigate(`/page/${pageNumber + 1}/search/${searchText}`);
+      if (genContext?.mainString) {
+        navigate(`/page/${pageNumber + 1}/search/${genContext?.mainString}`);
       } else {
         navigate(`/page/${pageNumber + 1}`);
       }
@@ -97,63 +100,30 @@ const ItemList = function () {
     <div className={classes.mainContainer}>
       <div className={classes.container}>
         <div className={classes.wrapper}>
-          <div>
-            {!beerList.length || !requestOK ? (
-              <div className={classes.matches}>No matches found</div>
-            ) : (
-              <div className={classes.matches}>
-                Matches on this page: {beerList.length}
-              </div>
-            )}
-          </div>
+          <Matches
+            listLength={genContext?.beerList.length as number}
+            requestOK={requestOK}
+          />
           <div className={classes.filler}>
-            {!requestOK ? (
-              <div className={classes.loader}>Bad request</div>
-            ) : (
+            {requestOK ? (
               <div>
                 {isLoading ? (
                   <Loader />
                 ) : (
-                  beerList.map((beer, index) => (
-                    <NavLink
-                      to={
-                        searchText
-                          ? `/page/${pageNumber}/search/${searchText}${
-                              sectionOpen
-                                ? ``
-                                : `/details/${Number(beerList[index].id)}`
-                            }`
-                          : `/page/${pageNumber}${
-                              sectionOpen
-                                ? ``
-                                : `/details/${Number(beerList[index].id)}`
-                            }`
-                      }
-                      key={beerList[index].id}
-                    >
-                      <div
-                        className={classes.flexContainer}
-                        key={index}
-                        onClick={setRightSectionState}
-                      >
-                        <div className={classes.imageContainer}>
-                          <img
-                            className={classes.itemImage}
-                            key={index}
-                            src={beer.image_url}
-                            alt={beer.name}
-                          />
-                        </div>
-                        <div className={classes.dataContainer}>
-                          <div>{beer.name}</div>
-                          <div>{beer.tagline}</div>
-                          <div>Volume: {beer.abv}%</div>
-                        </div>
-                      </div>
-                    </NavLink>
+                  genContext?.beerList.map((beer, index) => (
+                    <Item
+                      setRightSectionState={setRightSectionState}
+                      beer={beer}
+                      pageNumber={pageNumber}
+                      sectionOpen={sectionOpen}
+                      id={genContext?.beerList[index].id}
+                      key={genContext?.beerList[index].id}
+                    />
                   ))
                 )}
               </div>
+            ) : (
+              <div className={classes.loader}>Bad request</div>
             )}
           </div>
         </div>
@@ -168,7 +138,6 @@ const ItemList = function () {
         setPerPage={setPerPage}
         perPage={perPage}
         pageNumber={pageNumber}
-        searchString={searchText}
         isLoading={isLoading}
       />
     </div>

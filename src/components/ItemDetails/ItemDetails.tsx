@@ -2,8 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import classes from './ItemDetails.module.css';
 import { queryItem } from '../API/API';
-import { IBeerDetails } from '../ItemList/data';
-import { EMPTY_ITEMS_ARRAY } from '../ItemList/data';
+import { IBeerDetails, EMPTY_ITEMS_ARRAY } from '../../shared/data/data';
 import Loader from '../Loader/Loader';
 import { DataFromChildContext } from '../ItemList/ItemList';
 

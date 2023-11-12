@@ -5,8 +5,10 @@ import {
   PER_PAGE,
   BEER_NAME,
   SINGLE_BEER,
-} from './data';
-import { IBeerDetails } from '../ItemList/data';
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_ITEMS_PER_PAGE,
+  IBeerDetails,
+} from '../../shared/data/data';
 
 function buildQueryString(
   searchString: string | null,
@@ -54,8 +56,8 @@ async function sendGetQuery(
 
 async function queryItems(
   searchString: string | null,
-  pageNumber: number = 1,
-  perPage: number = 4
+  pageNumber: number = DEFAULT_PAGE_NUMBER,
+  perPage: number = DEFAULT_ITEMS_PER_PAGE
 ): Promise<[boolean, IBeerDetails[] | Error]> {
   const queryString = buildQueryString(searchString, pageNumber, perPage);
   let requestOK: boolean;
@@ -70,14 +72,15 @@ async function queryItems(
 }
 
 async function queryItem(id: number): Promise<IBeerDetails[]> {
+  let result: IBeerDetails[] = [];
   const queryString = SINGLE_BEER + id;
   const responseJSON: IBeerDetails[] | Error = await sendGetQuery(queryString);
 
   if (Array.isArray(responseJSON)) {
-    return responseJSON;
-  } else {
-    return [];
+    result = responseJSON;
   }
+
+  return result;
 }
 
-export { queryItems, queryItem };
+export { queryItems, queryItem, buildQueryString };
