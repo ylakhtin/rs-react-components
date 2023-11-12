@@ -6,10 +6,16 @@ import { SEARCH_DEFAULT } from '../../../shared/data/data';
 const PAGE_SEGMENT_NUMBER = 2;
 const SEARCH_STRING_TEST = 'a';
 
+beforeEach(() => {
+  server.listen();
+});
+
+afterEach(() => {
+  server.close();
+});
+
 describe('Paginator component', () => {
   it('Make sure the component updates URL query parameter when page changes. Next page', async () => {
-    server.listen();
-
     await render(<App />);
 
     const buttonElement = await screen.findByRole('button', { name: /Next/i });
@@ -20,13 +26,9 @@ describe('Paginator component', () => {
     const pageNum = pathSegments[PAGE_SEGMENT_NUMBER];
 
     expect(pageNum).toEqual(String(PAGE_SEGMENT_NUMBER));
-
-    server.close();
   });
 
   it('Make sure the component updates URL query parameter when page changes. Previous page', async () => {
-    server.listen();
-
     await render(<App />);
 
     const buttonNextElement = await screen.findByRole('button', {
@@ -45,13 +47,9 @@ describe('Paginator component', () => {
     const pageNum = pathSegments[PAGE_SEGMENT_NUMBER];
 
     expect(pageNum).toEqual(String(PAGE_SEGMENT_NUMBER));
-
-    server.close();
   });
 
   it('Checks page change using keyboard', async () => {
-    server.listen();
-
     localStorage.setItem(SEARCH_DEFAULT, SEARCH_STRING_TEST);
     await render(<App />);
 
@@ -62,7 +60,5 @@ describe('Paginator component', () => {
     expect(window.location.href).toContain(
       `/page/${PAGE_SEGMENT_NUMBER}/search/${SEARCH_STRING_TEST}`
     );
-
-    server.close();
   });
 });

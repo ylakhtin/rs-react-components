@@ -3,10 +3,16 @@ import { App } from '../../../App';
 import { server } from '../../MockService/Server';
 import { beerDetails } from '../../../shared/data/testData';
 
+beforeEach(() => {
+  server.listen();
+});
+
+afterEach(() => {
+  server.close();
+});
+
 describe('Card details component', () => {
   it('Check that a loading indicator is displayed while fetching data', async () => {
-    server.listen();
-
     await render(<App />);
 
     const name = await screen.findByText(beerDetails.name);
@@ -14,13 +20,9 @@ describe('Card details component', () => {
 
     const loader = screen.getByText(/Loading/i);
     expect(loader).not.toBeNull();
-
-    server.close();
   });
 
   it('Make sure the detailed card component correctly displays the detailed card data', async () => {
-    server.listen();
-
     await render(<App />);
 
     const name = await screen.findByText(beerDetails.name);
@@ -31,13 +33,9 @@ describe('Card details component', () => {
 
     expect(decriptionField).not.toBeNull();
     expect(brewedField).not.toBeNull();
-
-    server.close();
   });
 
   it('Ensure that clicking the close button hides the component', async () => {
-    server.listen();
-
     await render(<App />);
 
     const name = await screen.findByText(beerDetails.name);
@@ -55,7 +53,5 @@ describe('Card details component', () => {
       const descriptionElement = screen.queryByText(/Description/i);
       expect(descriptionElement).toBeNull();
     });
-
-    server.close();
   });
 });
