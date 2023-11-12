@@ -26,26 +26,24 @@ function Paginator(props: {
     setPage(props.pageNumber);
   }, [props.pageNumber]);
 
-  function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
+  function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>): void {
     if (event.key === 'Enter') {
       props.setPageNum(page);
-
-      let url = '/page/' + page;
-
-      if (genContext?.mainString) {
-        url += '/search/' + genContext?.mainString;
-      }
-      navigate(url);
+      doNavigate(genContext?.mainString, page);
     }
   }
 
-  function setItemsPerPage(event: React.ChangeEvent<HTMLSelectElement>) {
-    props.setPerPage(Number(event.target.value));
-    if (genContext?.mainString) {
-      navigate(`/page/${DEFAULT_PAGE_NUMBER}/search/${genContext?.mainString}`);
+  function doNavigate(searchString: string | undefined, pageNumber: number) {
+    if (searchString) {
+      navigate(`/page/${pageNumber}/search/${searchString}`);
     } else {
-      navigate(`/page/${DEFAULT_PAGE_NUMBER}`);
+      navigate(`/page/${pageNumber}`);
     }
+  }
+
+  function setItemsPerPage(event: React.ChangeEvent<HTMLSelectElement>): void {
+    props.setPerPage(Number(event.target.value));
+    doNavigate(genContext?.mainString, DEFAULT_PAGE_NUMBER);
   }
 
   return (

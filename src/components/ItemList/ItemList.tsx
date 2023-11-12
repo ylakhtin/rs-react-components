@@ -1,10 +1,4 @@
-import {
-  useState,
-  useEffect,
-  useCallback,
-  createContext,
-  useContext,
-} from 'react';
+import { useState, useEffect, createContext, useContext } from 'react';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import classes from './ItemList.module.css';
 import Paginator from '../Paginator/Paginator';
@@ -42,8 +36,19 @@ const ItemList = function () {
 
   const genContext: IGeneralContext | null = useContext(GeneralContext);
 
-  const queryData = useCallback(
-    async (pageNumber: number) => {
+  useEffect(() => {
+    if (searchStr) {
+      genContext?.setMainString(searchStr);
+    } else {
+      genContext?.setMainString('');
+    }
+    if (pageNum) {
+      setPageNumber(Number(pageNum));
+    }
+  }, [genContext, pageNum, searchStr]);
+
+  useEffect(() => {
+    (async () => {
       setIsLoading(true);
 
       const [requestOKCandidate, beerListCandidate] = await queryItems(
@@ -58,25 +63,9 @@ const ItemList = function () {
       }
 
       setIsLoading(false);
-    },
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [genContext?.mainString, perPage]
-  );
-
-  useEffect(() => {
-    if (searchStr) {
-      genContext?.setMainString(searchStr);
-    } else {
-      genContext?.setMainString('');
-    }
-    if (pageNum) {
-      setPageNumber(Number(pageNum));
-    }
-  }, [genContext, pageNum, searchStr]);
-
-  useEffect(() => {
-    queryData(pageNumber);
-  }, [pageNumber, genContext?.mainString, queryData]);
+  }, [pageNumber, genContext?.mainString, perPage]);
 
   async function prevPage(): Promise<void> {
     if (pageNumber - 1 >= 1) {
