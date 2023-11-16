@@ -8,7 +8,6 @@ import {
   SEARCH_DEFAULT,
   MAX_AMOUNT,
   DEFAULT_PAGE_NUMBER,
-  DEFAULT_ITEMS_PER_PAGE,
 } from '../../shared/data/data';
 import Item from '../Item/Item';
 import Matches from '../Matches/Matches';
@@ -25,7 +24,6 @@ const ItemList = function () {
   const [requestOK, setRequestOK] = useState(true);
   const [sectionOpen, setSectionOpen] = useState(false);
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
-  const [perPage, setPerPage] = useState(DEFAULT_ITEMS_PER_PAGE);
 
   const navigate = useNavigate();
 
@@ -41,16 +39,15 @@ const ItemList = function () {
   const itemRootList = useAppSelector(
     (state) => state.itemListReducer.beerList
   );
+  const perPage = useAppSelector((state) => state.perPageReducer.perPage);
   const { setItemList } = itemListSlice.actions;
   const { setRootSearch } = searchSlice.actions;
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (searchStr) {
-      // genContext?.setMainString(searchStr);
       dispatch(setRootSearch(searchStr));
     } else {
-      // genContext?.setMainString('');
       dispatch(setRootSearch(''));
     }
     if (pageNum) {
@@ -71,7 +68,6 @@ const ItemList = function () {
 
       setRequestOK(requestOKCandidate);
       if (Array.isArray(beerListCandidate)) {
-        // genContext?.setBeerList(beerListCandidate);
         dispatch(setItemList(beerListCandidate));
       }
 
@@ -148,8 +144,6 @@ const ItemList = function () {
         prevPage={prevPage}
         nextPage={nextPage}
         setPageNum={setPageNumber}
-        setPerPage={setPerPage}
-        perPage={perPage}
         pageNumber={pageNumber}
         isLoading={isLoading}
       />

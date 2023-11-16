@@ -6,14 +6,13 @@ import {
   DEFAULT_ITEMS_PER_PAGE,
   ITEMS_PER_PAGE,
 } from '../../shared/data/data';
-import { useAppSelector } from '../../utils/hooks/reduxHooks';
+import { useAppDispatch, useAppSelector } from '../../utils/hooks/reduxHooks';
+import { perPageSlice } from '../../utils/Store/Reducers/PerPageReducer';
 
 function Paginator(props: {
   prevPage: () => void;
   nextPage: () => void;
   setPageNum: React.Dispatch<React.SetStateAction<number>>;
-  setPerPage: React.Dispatch<React.SetStateAction<number>>;
-  perPage: number;
   pageNumber: number;
   isLoading: boolean;
 }) {
@@ -22,6 +21,9 @@ function Paginator(props: {
   const searchRootString = useAppSelector(
     (state) => state.searchSliceReducer.searchRootString
   );
+  const perPage = useAppSelector((state) => state.perPageReducer.perPage);
+  const { setPerPage } = perPageSlice.actions;
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setPage(props.pageNumber);
@@ -43,7 +45,7 @@ function Paginator(props: {
   }
 
   function setItemsPerPage(event: React.ChangeEvent<HTMLSelectElement>): void {
-    props.setPerPage(Number(event.target.value));
+    dispatch(setPerPage(Number(event.target.value)));
     doNavigate(searchRootString, DEFAULT_PAGE_NUMBER);
   }
 
@@ -65,15 +67,15 @@ function Paginator(props: {
           <div className={classes.itemsPerPage}>
             <span>Items amount: </span>
             <select name="perPage" id="itemsPerPage" onChange={setItemsPerPage}>
-              <option value={props.perPage}>{props.perPage} per page</option>
+              <option value={perPage}>{perPage} per page</option>
               <option
                 value={
-                  props.perPage === DEFAULT_ITEMS_PER_PAGE
+                  perPage === DEFAULT_ITEMS_PER_PAGE
                     ? ITEMS_PER_PAGE
                     : DEFAULT_ITEMS_PER_PAGE
                 }
               >
-                {props.perPage === DEFAULT_ITEMS_PER_PAGE
+                {perPage === DEFAULT_ITEMS_PER_PAGE
                   ? ITEMS_PER_PAGE
                   : DEFAULT_ITEMS_PER_PAGE}{' '}
                 per page
