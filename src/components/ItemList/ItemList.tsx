@@ -3,7 +3,7 @@ import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import classes from './ItemList.module.css';
 import Paginator from '../Paginator/Paginator';
 import Loader from '../Loader/Loader';
-import { buildQueryString } from '../API/API';
+import { buildQueryString } from '../../utils/StringBuilder/StringBuilder';
 import {
   SEARCH_DEFAULT,
   MAX_AMOUNT,
@@ -14,12 +14,8 @@ import Matches from '../Matches/Matches';
 import { useAppDispatch, useAppSelector } from '../../utils/hooks/reduxHooks';
 import { searchSlice } from '../../utils/Store/Reducers/SearchReducer';
 import { itemListSlice } from '../../utils/Store/Reducers/ItemListReducer';
-import { beerAPI } from '../../utils/services/BeerService';
 import { detailsOpenSlice } from '../../utils/Store/Reducers/ItemDetailsReducer';
-
-// export const DataFromChildContext = createContext<React.Dispatch<
-//   React.SetStateAction<boolean>
-// > | null>(null);
+import { beerAPI } from '../../utils/services/BeerService';
 
 const ItemList = function () {
   const [isLoading, setIsLoading] = useState(false);
@@ -120,9 +116,7 @@ const ItemList = function () {
           <div className={classes.filler}>
             {requestOK ? (
               <div>
-                {!data ? (
-                  <Loader />
-                ) : (
+                {data ? (
                   data.map((beer, index) => (
                     <Item
                       setRightSectionState={setRightSectionState}
@@ -133,6 +127,8 @@ const ItemList = function () {
                       key={data[index].id}
                     />
                   ))
+                ) : (
+                  <Loader />
                 )}
               </div>
             ) : (

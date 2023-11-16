@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { server } from '../../MockService/Server';
+import { server } from '../../../utils/MockService/Server';
 import { App } from '../../../App';
 import { SEARCH_DEFAULT } from '../../../shared/data/data';
 

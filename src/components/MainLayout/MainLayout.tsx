@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import classes from './MainLayout.module.css';
-import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../utils/ErrorBoundary/ErrorBoundary';
 import Search from '../Search/Search';
 import { Provider } from 'react-redux';
 import { setupStore } from '../../utils/Store/Store';

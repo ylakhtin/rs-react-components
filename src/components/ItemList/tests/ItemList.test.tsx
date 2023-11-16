@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { server } from '../../MockService/Server';
+import { server } from '../../../utils/MockService/Server';
 import { App } from '../../../App';
 import {
   DEFAULT_ITEMS_PER_PAGE,
