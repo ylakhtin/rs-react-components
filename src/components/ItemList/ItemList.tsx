@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useContext } from 'react';
+import { useState, useEffect, createContext } from 'react';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import classes from './ItemList.module.css';
 import Paginator from '../Paginator/Paginator';
@@ -9,11 +9,12 @@ import {
   MAX_AMOUNT,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_ITEMS_PER_PAGE,
-  IGeneralContext,
 } from '../../shared/data/data';
 import Item from '../Item/Item';
 import Matches from '../Matches/Matches';
-import { GeneralContext } from '../MainLayout/MainLayout';
+import { useAppDispatch, useAppSelector } from '../../utils/hooks/reduxHooks';
+import { searchSlice } from '../../utils/Store/Reducers/SearchReducer';
+import { itemListSlice } from '../../utils/Store/Reducers/ItemListReducer';
 
 export const DataFromChildContext = createContext<React.Dispatch<
   React.SetStateAction<boolean>
@@ -34,43 +35,55 @@ const ItemList = function () {
     index,
   } = useParams();
 
-  const genContext: IGeneralContext | null = useContext(GeneralContext);
+  const searchRootString = useAppSelector(
+    (state) => state.searchSliceReducer.searchRootString
+  );
+  const itemRootList = useAppSelector(
+    (state) => state.itemListReducer.beerList
+  );
+  const { setItemList } = itemListSlice.actions;
+  const { setRootSearch } = searchSlice.actions;
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (searchStr) {
-      genContext?.setMainString(searchStr);
+      // genContext?.setMainString(searchStr);
+      dispatch(setRootSearch(searchStr));
     } else {
-      genContext?.setMainString('');
+      // genContext?.setMainString('');
+      dispatch(setRootSearch(''));
     }
     if (pageNum) {
       setPageNumber(Number(pageNum));
     }
-  }, [genContext, pageNum, searchStr]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchRootString, pageNum, searchStr]);
 
   useEffect(() => {
     (async () => {
       setIsLoading(true);
 
       const [requestOKCandidate, beerListCandidate] = await queryItems(
-        genContext?.mainString as string,
+        searchRootString,
         pageNumber,
         perPage
       );
 
       setRequestOK(requestOKCandidate);
       if (Array.isArray(beerListCandidate)) {
-        genContext?.setBeerList(beerListCandidate);
+        // genContext?.setBeerList(beerListCandidate);
+        dispatch(setItemList(beerListCandidate));
       }
 
       setIsLoading(false);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageNumber, genContext?.mainString, perPage]);
+  }, [pageNumber, searchRootString, perPage]);
 
   async function prevPage(): Promise<void> {
     if (pageNumber - 1 >= 1) {
-      if (genContext?.mainString) {
-        navigate(`/page/${pageNumber - 1}/search/${genContext?.mainString}`);
+      if (searchRootString) {
+        navigate(`/page/${pageNumber - 1}/search/${searchRootString}`);
       } else {
         navigate(`/page/${pageNumber - 1}`);
       }
@@ -80,8 +93,8 @@ const ItemList = function () {
   async function nextPage(): Promise<void> {
     const limit = Math.ceil(MAX_AMOUNT / perPage);
     if (pageNumber + 1 <= limit) {
-      if (genContext?.mainString) {
-        navigate(`/page/${pageNumber + 1}/search/${genContext?.mainString}`);
+      if (searchRootString) {
+        navigate(`/page/${pageNumber + 1}/search/${searchRootString}`);
       } else {
         navigate(`/page/${pageNumber + 1}`);
       }
@@ -101,7 +114,7 @@ const ItemList = function () {
       <div className={classes.container}>
         <div className={classes.wrapper}>
           <Matches
-            listLength={genContext?.beerList.length as number}
+            listLength={itemRootList.length as number}
             requestOK={requestOK}
           />
           <div className={classes.filler}>
@@ -110,14 +123,14 @@ const ItemList = function () {
                 {isLoading ? (
                   <Loader />
                 ) : (
-                  genContext?.beerList.map((beer, index) => (
+                  itemRootList.map((beer, index) => (
                     <Item
                       setRightSectionState={setRightSectionState}
                       beer={beer}
                       pageNumber={pageNumber}
                       sectionOpen={sectionOpen}
-                      id={genContext?.beerList[index].id}
-                      key={genContext?.beerList[index].id}
+                      id={itemRootList[index].id}
+                      key={itemRootList[index].id}
                     />
                   ))
                 )}

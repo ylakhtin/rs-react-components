@@ -1,21 +1,12 @@
 import { Outlet } from 'react-router-dom';
-import { createContext, useState } from 'react';
 import classes from './MainLayout.module.css';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import Search from '../Search/Search';
-import {
-  EMPTY_ITEMS_ARRAY,
-  SEARCH_DEFAULT,
-  IGeneralContext,
-} from '../../shared/data/data';
-
-export const GeneralContext = createContext<IGeneralContext | null>(null);
+import { Provider } from 'react-redux';
+import { setupStore } from '../../utils/Store/Store';
 
 const MainLayout = function () {
-  const [mainString, setMainString] = useState(
-    localStorage.getItem(SEARCH_DEFAULT) || ''
-  );
-  const [beerList, setBeerList] = useState(EMPTY_ITEMS_ARRAY);
+  const store = setupStore();
 
   return (
     <div className={classes.mainSpace}>
@@ -24,14 +15,12 @@ const MainLayout = function () {
           'Error, please, reload the page! This is to test Error boundary! This is a fallback message!'
         }
       >
-        <GeneralContext.Provider
-          value={{ mainString, setMainString, beerList, setBeerList }}
-        >
+        <Provider store={store}>
           <div className="wrapper">
             <Search />
           </div>
           <Outlet />
-        </GeneralContext.Provider>
+        </Provider>
       </ErrorBoundary>
     </div>
   );

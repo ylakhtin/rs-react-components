@@ -1,13 +1,12 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import classes from './Paginator.module.css';
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_ITEMS_PER_PAGE,
   ITEMS_PER_PAGE,
-  IGeneralContext,
 } from '../../shared/data/data';
-import { GeneralContext } from '../MainLayout/MainLayout';
+import { useAppSelector } from '../../utils/hooks/reduxHooks';
 
 function Paginator(props: {
   prevPage: () => void;
@@ -20,7 +19,9 @@ function Paginator(props: {
 }) {
   const [page, setPage] = useState(props.pageNumber);
   const navigate = useNavigate();
-  const genContext: IGeneralContext | null = useContext(GeneralContext);
+  const searchRootString = useAppSelector(
+    (state) => state.searchSliceReducer.searchRootString
+  );
 
   useEffect(() => {
     setPage(props.pageNumber);
@@ -29,7 +30,7 @@ function Paginator(props: {
   function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>): void {
     if (event.key === 'Enter') {
       props.setPageNum(page);
-      doNavigate(genContext?.mainString, page);
+      doNavigate(searchRootString, page);
     }
   }
 
@@ -43,7 +44,7 @@ function Paginator(props: {
 
   function setItemsPerPage(event: React.ChangeEvent<HTMLSelectElement>): void {
     props.setPerPage(Number(event.target.value));
-    doNavigate(genContext?.mainString, DEFAULT_PAGE_NUMBER);
+    doNavigate(searchRootString, DEFAULT_PAGE_NUMBER);
   }
 
   return (
