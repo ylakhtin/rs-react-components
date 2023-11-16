@@ -1,9 +1,9 @@
-import { useState, useEffect, createContext } from 'react';
+import { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import classes from './ItemList.module.css';
 import Paginator from '../Paginator/Paginator';
 import Loader from '../Loader/Loader';
-import { queryItems } from '../API/API';
+import { buildQueryString } from '../API/API';
 import {
   SEARCH_DEFAULT,
   MAX_AMOUNT,
@@ -14,15 +14,16 @@ import Matches from '../Matches/Matches';
 import { useAppDispatch, useAppSelector } from '../../utils/hooks/reduxHooks';
 import { searchSlice } from '../../utils/Store/Reducers/SearchReducer';
 import { itemListSlice } from '../../utils/Store/Reducers/ItemListReducer';
+import { beerAPI } from '../../utils/services/BeerService';
+import { detailsOpenSlice } from '../../utils/Store/Reducers/ItemDetailsReducer';
 
-export const DataFromChildContext = createContext<React.Dispatch<
-  React.SetStateAction<boolean>
-> | null>(null);
+// export const DataFromChildContext = createContext<React.Dispatch<
+//   React.SetStateAction<boolean>
+// > | null>(null);
 
 const ItemList = function () {
   const [isLoading, setIsLoading] = useState(false);
   const [requestOK, setRequestOK] = useState(true);
-  const [sectionOpen, setSectionOpen] = useState(false);
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
 
   const navigate = useNavigate();
@@ -36,13 +37,20 @@ const ItemList = function () {
   const searchRootString = useAppSelector(
     (state) => state.searchSliceReducer.searchRootString
   );
-  const itemRootList = useAppSelector(
-    (state) => state.itemListReducer.beerList
+
+  const sectionOpen = useAppSelector(
+    (state) => state.itemDetailsReducer.sectionOpen
   );
   const perPage = useAppSelector((state) => state.perPageReducer.perPage);
+  const { setDetailsOpen } = detailsOpenSlice.actions;
   const { setItemList } = itemListSlice.actions;
   const { setRootSearch } = searchSlice.actions;
   const dispatch = useAppDispatch();
+  const [queryString, setQueryString] = useState(
+    buildQueryString(searchRootString, pageNumber, perPage)
+  );
+
+  const { data } = beerAPI.useFetchDataQuery(queryString);
 
   useEffect(() => {
     if (searchStr) {
@@ -60,15 +68,11 @@ const ItemList = function () {
     (async () => {
       setIsLoading(true);
 
-      const [requestOKCandidate, beerListCandidate] = await queryItems(
-        searchRootString,
-        pageNumber,
-        perPage
-      );
+      setQueryString(buildQueryString(searchRootString, pageNumber, perPage));
 
-      setRequestOK(requestOKCandidate);
-      if (Array.isArray(beerListCandidate)) {
-        dispatch(setItemList(beerListCandidate));
+      if (Array.isArray(data)) {
+        setRequestOK(true);
+        dispatch(setItemList(data));
       }
 
       setIsLoading(false);
@@ -99,9 +103,9 @@ const ItemList = function () {
 
   function setRightSectionState() {
     if (!index) {
-      setSectionOpen(true);
+      dispatch(setDetailsOpen(true));
     } else {
-      setSectionOpen(false);
+      dispatch(setDetailsOpen(false));
     }
   }
 
@@ -110,23 +114,23 @@ const ItemList = function () {
       <div className={classes.container}>
         <div className={classes.wrapper}>
           <Matches
-            listLength={itemRootList.length as number}
+            listLength={data ? (data.length as number) : 0}
             requestOK={requestOK}
           />
           <div className={classes.filler}>
             {requestOK ? (
               <div>
-                {isLoading ? (
+                {!data ? (
                   <Loader />
                 ) : (
-                  itemRootList.map((beer, index) => (
+                  data.map((beer, index) => (
                     <Item
                       setRightSectionState={setRightSectionState}
                       beer={beer}
                       pageNumber={pageNumber}
                       sectionOpen={sectionOpen}
-                      id={itemRootList[index].id}
-                      key={itemRootList[index].id}
+                      id={data[index].id}
+                      key={data[index].id}
                     />
                   ))
                 )}
@@ -136,9 +140,7 @@ const ItemList = function () {
             )}
           </div>
         </div>
-        <DataFromChildContext.Provider value={setSectionOpen}>
-          <Outlet />
-        </DataFromChildContext.Provider>
+        <Outlet />
       </div>
       <Paginator
         prevPage={prevPage}
