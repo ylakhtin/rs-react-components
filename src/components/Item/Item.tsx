@@ -10,9 +10,7 @@ const Item = function (props: {
   sectionOpen: boolean;
   id: number;
 }) {
-  const searchRootString = useAppSelector(
-    (state) => state.searchSliceReducer.searchRootString
-  );
+  const searchRootString = useAppSelector((state) => state.searchSliceReducer.searchRootString);
 
   function getURL(): string {
     let url = '/page/' + props.pageNumber;
@@ -30,11 +28,7 @@ const Item = function (props: {
 
   return (
     <NavLink to={getURL()} key={props.id}>
-      <div
-        className={classes.flexContainer}
-        key={props.id}
-        onClick={props.setRightSectionState}
-      >
+      <div className={classes.flexContainer} key={props.id} onClick={props.setRightSectionState}>
         <div className={classes.imageContainer}>
           <img
             className={classes.itemImage}

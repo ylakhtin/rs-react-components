@@ -10,10 +10,10 @@ const initialState: IList = {
 };
 
 export const itemListSlice = createSlice({
-  name: 'Search',
+  name: 'ItemList',
   initialState,
   reducers: {
-    setItemList(state, action: PayloadAction<IBeerDetails[]>) {
+    setItemList(state: IList, action: PayloadAction<IBeerDetails[]>) {
       state.beerList = action.payload;
     },
   },

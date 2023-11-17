@@ -1,10 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { server } from '../../../utils/MockService/Server';
 import { App } from '../../../App';
-import {
-  DEFAULT_ITEMS_PER_PAGE,
-  ITEMS_PER_PAGE,
-} from '../../../shared/data/data';
+import { DEFAULT_ITEMS_PER_PAGE, ITEMS_PER_PAGE } from '../../../shared/data/data';
 
 /* IMPORTANT!!! 'Check that an appropriate message is displayed if no cards are present' is checked in "rs-react-components\src\components\Matches\tests\Matches.test.tsx"
 / I just put a number of matches into a dedicated component called 'Matches'
@@ -27,9 +24,7 @@ describe('Card List details component', () => {
     fireEvent.focus(perPageDropdown);
     fireEvent.keyDown(perPageDropdown, { key: 'ArrowDown' });
 
-    const optionToClick = await waitFor(() =>
-      screen.getByText(`${ITEMS_PER_PAGE} per page`)
-    );
+    const optionToClick = await waitFor(() => screen.getByText(`${ITEMS_PER_PAGE} per page`));
     fireEvent.click(optionToClick);
 
     waitFor(async () => {

@@ -1,9 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import Search from '../Search';
-import {
-  SEARCH_DEFAULT,
-  SEARCH_PLACEHOLDER_TEXT,
-} from '../../../shared/data/data';
+import { SEARCH_DEFAULT, SEARCH_PLACEHOLDER_TEXT } from '../../../shared/data/data';
 import { BrowserRouter } from 'react-router-dom';
 
 const TEST_STRING = 'abracadabra';
@@ -22,9 +19,7 @@ describe('Search component', () => {
 
     localStorage.setItem(SEARCH_DEFAULT, '');
 
-    const inputElement = await screen.findByPlaceholderText(
-      SEARCH_PLACEHOLDER_TEXT
-    );
+    const inputElement = await screen.findByPlaceholderText(SEARCH_PLACEHOLDER_TEXT);
 
     fireEvent.change(inputElement, { target: { value: TEST_STRING } });
     const buttonElement = await screen.findByRole('button', {

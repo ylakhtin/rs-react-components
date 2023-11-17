@@ -10,10 +10,10 @@ const initialState: IPerPage = {
 };
 
 export const perPageSlice = createSlice({
-  name: 'Search',
+  name: 'PerPage',
   initialState,
   reducers: {
-    setPerPage(state, action: PayloadAction<number>) {
+    setPerPage(state: IPerPage, action: PayloadAction<number>) {
       state.perPage = action.payload;
     },
   },

@@ -13,7 +13,7 @@ export const searchSlice = createSlice({
   name: 'Search',
   initialState,
   reducers: {
-    setRootSearch(state, action: PayloadAction<string>) {
+    setRootSearch(state: ISearchString, action: PayloadAction<string>) {
       state.searchRootString = action.payload;
     },
   },

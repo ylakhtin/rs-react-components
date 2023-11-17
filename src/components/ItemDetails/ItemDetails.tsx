@@ -5,12 +5,20 @@ import Loader from '../Loader/Loader';
 import { beerAPI } from '../../utils/services/BeerService';
 import { detailsOpenSlice } from '../../utils/Store/Reducers/ItemDetailsReducer';
 import { useAppDispatch } from '../../utils/hooks/reduxHooks';
+import { useEffect } from 'react';
+import { itemLoadingSlice } from '../../utils/Store/Reducers/ItemDetailLoadReducer';
 
 const ItemDetails = function () {
   const { index } = useParams();
-  const { data } = beerAPI.useFetchDataQuery(SINGLE_BEER + index);
+  const { data, isFetching } = beerAPI.useFetchDataQuery(SINGLE_BEER + index);
   const { setDetailsOpen } = detailsOpenSlice.actions;
+  const { setItemLoading } = itemLoadingSlice.actions;
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setItemLoading(isFetching));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFetching]);
 
   function closeSection() {
     dispatch(setDetailsOpen(false));
@@ -23,9 +31,8 @@ const ItemDetails = function () {
           <button onClick={closeSection}>Close</button>
         </NavLink>
       </div>
-      {!data ? (
-        <Loader />
-      ) : (
+      {isFetching ? <Loader /> : <div></div>}
+      {data ? (
         <div className={classes.dataContainer}>
           <div>
             <span>Description: </span> {data[0].description}
@@ -35,6 +42,8 @@ const ItemDetails = function () {
             {data[0].first_brewed}
           </div>
         </div>
+      ) : (
+        <div></div>
       )}
     </div>
   );

@@ -18,11 +18,12 @@ function Paginator(props: {
 }) {
   const [page, setPage] = useState(props.pageNumber);
   const navigate = useNavigate();
-  const searchRootString = useAppSelector(
-    (state) => state.searchSliceReducer.searchRootString
-  );
+  const searchRootString = useAppSelector((state) => state.searchSliceReducer.searchRootString);
   const perPage = useAppSelector((state) => state.perPageReducer.perPage);
+  // const isLoading = useAppSelector((state) => state.isLoadingReducer.isLoading);
+
   const { setPerPage } = perPageSlice.actions;
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -51,7 +52,7 @@ function Paginator(props: {
 
   return (
     <div>
-      {!props.isLoading && (
+      {!props.isLoading ? (
         <div className={classes.mainContainer}>
           <div className={classes.container}>
             <button onClick={props.prevPage}>Prev</button>
@@ -69,20 +70,16 @@ function Paginator(props: {
             <select name="perPage" id="itemsPerPage" onChange={setItemsPerPage}>
               <option value={perPage}>{perPage} per page</option>
               <option
-                value={
-                  perPage === DEFAULT_ITEMS_PER_PAGE
-                    ? ITEMS_PER_PAGE
-                    : DEFAULT_ITEMS_PER_PAGE
-                }
+                value={perPage === DEFAULT_ITEMS_PER_PAGE ? ITEMS_PER_PAGE : DEFAULT_ITEMS_PER_PAGE}
               >
-                {perPage === DEFAULT_ITEMS_PER_PAGE
-                  ? ITEMS_PER_PAGE
-                  : DEFAULT_ITEMS_PER_PAGE}{' '}
-                per page
+                {perPage === DEFAULT_ITEMS_PER_PAGE ? ITEMS_PER_PAGE : DEFAULT_ITEMS_PER_PAGE} per
+                page
               </option>
             </select>
           </div>
         </div>
+      ) : (
+        <></>
       )}
     </div>
   );

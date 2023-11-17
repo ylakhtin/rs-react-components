@@ -1,10 +1,4 @@
-import {
-  ROOT_ENDPOINT,
-  BEERS,
-  PAGE_NUMBER,
-  PER_PAGE,
-  BEER_NAME,
-} from '../../shared/data/data';
+import { ROOT_ENDPOINT, BEERS, PAGE_NUMBER, PER_PAGE, BEER_NAME } from '../../shared/data/data';
 
 function buildQueryString(
   searchString: string | null,
@@ -24,8 +18,7 @@ function buildQueryString(
       BEER_NAME +
       searchString.trim();
   } else {
-    queryString =
-      ROOT_ENDPOINT + BEERS + PAGE_NUMBER + pageNumber + PER_PAGE + perPage;
+    queryString = ROOT_ENDPOINT + BEERS + PAGE_NUMBER + pageNumber + PER_PAGE + perPage;
   }
 
   return queryString;

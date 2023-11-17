@@ -9,10 +9,10 @@ const initialState: IdetailsState = {
 };
 
 export const detailsOpenSlice = createSlice({
-  name: 'Search',
+  name: 'DetailsOpen',
   initialState,
   reducers: {
-    setDetailsOpen(state, action: PayloadAction<boolean>) {
+    setDetailsOpen(state: IdetailsState, action: PayloadAction<boolean>) {
       state.sectionOpen = action.payload;
     },
   },

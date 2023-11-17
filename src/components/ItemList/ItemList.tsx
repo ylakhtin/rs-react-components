@@ -4,11 +4,7 @@ import classes from './ItemList.module.css';
 import Paginator from '../Paginator/Paginator';
 import Loader from '../Loader/Loader';
 import { buildQueryString } from '../../utils/StringBuilder/StringBuilder';
-import {
-  SEARCH_DEFAULT,
-  MAX_AMOUNT,
-  DEFAULT_PAGE_NUMBER,
-} from '../../shared/data/data';
+import { SEARCH_DEFAULT, MAX_AMOUNT, DEFAULT_PAGE_NUMBER } from '../../shared/data/data';
 import Item from '../Item/Item';
 import Matches from '../Matches/Matches';
 import { useAppDispatch, useAppSelector } from '../../utils/hooks/reduxHooks';
@@ -16,10 +12,9 @@ import { searchSlice } from '../../utils/Store/Reducers/SearchReducer';
 import { itemListSlice } from '../../utils/Store/Reducers/ItemListReducer';
 import { detailsOpenSlice } from '../../utils/Store/Reducers/ItemDetailsReducer';
 import { beerAPI } from '../../utils/services/BeerService';
+import { listLoadingSlice } from '../../utils/Store/Reducers/ListLoadReducer';
 
 const ItemList = function () {
-  const [isLoading, setIsLoading] = useState(false);
-  const [requestOK, setRequestOK] = useState(true);
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
 
   const navigate = useNavigate();
@@ -30,23 +25,27 @@ const ItemList = function () {
     index,
   } = useParams();
 
-  const searchRootString = useAppSelector(
-    (state) => state.searchSliceReducer.searchRootString
-  );
+  const searchRootString = useAppSelector((state) => state.searchSliceReducer.searchRootString);
 
-  const sectionOpen = useAppSelector(
-    (state) => state.itemDetailsReducer.sectionOpen
-  );
+  const sectionOpen = useAppSelector((state) => state.itemDetailsReducer.sectionOpen);
   const perPage = useAppSelector((state) => state.perPageReducer.perPage);
+
   const { setDetailsOpen } = detailsOpenSlice.actions;
   const { setItemList } = itemListSlice.actions;
   const { setRootSearch } = searchSlice.actions;
+  const { setListLoading } = listLoadingSlice.actions;
+
   const dispatch = useAppDispatch();
   const [queryString, setQueryString] = useState(
     buildQueryString(searchRootString, pageNumber, perPage)
   );
 
-  const { data } = beerAPI.useFetchDataQuery(queryString);
+  const { data, error, isLoading, isFetching } = beerAPI.useFetchDataQuery(queryString);
+
+  useEffect(() => {
+    dispatch(setListLoading(isFetching));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFetching]);
 
   useEffect(() => {
     if (searchStr) {
@@ -61,20 +60,18 @@ const ItemList = function () {
   }, [searchRootString, pageNum, searchStr]);
 
   useEffect(() => {
-    (async () => {
-      setIsLoading(true);
+    setQueryString(buildQueryString(searchRootString, pageNumber, perPage));
 
-      setQueryString(buildQueryString(searchRootString, pageNumber, perPage));
+    if (Array.isArray(data)) {
+      dispatch(setItemList(data));
+    }
 
-      if (Array.isArray(data)) {
-        setRequestOK(true);
-        dispatch(setItemList(data));
-      }
-
-      setIsLoading(false);
-    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNumber, searchRootString, perPage]);
+
+  useEffect(() => {
+    console.log('isFetching - ', isFetching);
+  }, [isFetching]);
 
   async function prevPage(): Promise<void> {
     if (pageNumber - 1 >= 1) {
@@ -109,15 +106,15 @@ const ItemList = function () {
     <div className={classes.mainContainer}>
       <div className={classes.container}>
         <div className={classes.wrapper}>
-          <Matches
-            listLength={data ? (data.length as number) : 0}
-            requestOK={requestOK}
-          />
+          <Matches listLength={data ? (data.length as number) : 0} requestOK={!error} />
           <div className={classes.filler}>
-            {requestOK ? (
+            {error ? (
+              <div className={classes.loader}>Bad request</div>
+            ) : (
               <div>
-                {data ? (
-                  data.map((beer, index) => (
+                {isFetching && <Loader />}
+                {!isFetching &&
+                  data?.map((beer, index) => (
                     <Item
                       setRightSectionState={setRightSectionState}
                       beer={beer}
@@ -126,13 +123,8 @@ const ItemList = function () {
                       id={data[index].id}
                       key={data[index].id}
                     />
-                  ))
-                ) : (
-                  <Loader />
-                )}
+                  ))}
               </div>
-            ) : (
-              <div className={classes.loader}>Bad request</div>
             )}
           </div>
         </div>
