@@ -16,6 +16,11 @@ describe('Card List details component', () => {
     server.close();
   });
 
+  it('Smoke check', async () => {
+    const app = await render(<App />);
+    expect(app).not.toBeNull();
+  });
+
   it('Verify that the component renders the specified number of cards. Test 1.', async () => {
     render(<App />);
 

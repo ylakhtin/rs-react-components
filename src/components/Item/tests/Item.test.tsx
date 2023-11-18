@@ -44,17 +44,4 @@ describe('Card component', () => {
     expect(tagline.textContent).toEqual(beerDetails.tagline);
     expect(volume.textContent).toContain(beerDetails.abv);
   });
-
-  it('Check that clicking triggers an additional API call to fetch detailed information', async () => {
-    // const mockedData: IBeerDetails[] = [];
-    // mockedData.push(beerDetails);
-    // const originalFetch = globalThis.fetch;
-    // globalThis.fetch = async () =>
-    //   ({
-    //     json: async () => mockedData,
-    //   }) as Response;
-    // const result = await queryItem(beerDetails.id);
-    // expect(result).toEqual(mockedData);
-    // globalThis.fetch = originalFetch;
-  });
 });

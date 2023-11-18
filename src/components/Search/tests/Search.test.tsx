@@ -1,21 +1,12 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import Search from '../Search';
 import { SEARCH_DEFAULT, SEARCH_PLACEHOLDER_TEXT } from '../../../shared/data/data';
-import { BrowserRouter } from 'react-router-dom';
+import { App } from '../../../App';
 
 const TEST_STRING = 'abracadabra';
 
-const MockSearchComponent = () => {
-  return (
-    <BrowserRouter>
-      <Search />
-    </BrowserRouter>
-  );
-};
-
 describe('Search component', () => {
   it('Verify that clicking the Search button saves the entered value to the local storage', async () => {
-    await render(<MockSearchComponent />);
+    await render(<App />);
 
     localStorage.setItem(SEARCH_DEFAULT, '');
 
@@ -32,7 +23,7 @@ describe('Search component', () => {
 
   it('Check that the component retrieves the value from the local storage upon mounting', async () => {
     localStorage.setItem(SEARCH_DEFAULT, TEST_STRING);
-    await render(<MockSearchComponent />);
+    await render(<App />);
 
     const inputElement = (await screen.findByPlaceholderText(
       SEARCH_PLACEHOLDER_TEXT
