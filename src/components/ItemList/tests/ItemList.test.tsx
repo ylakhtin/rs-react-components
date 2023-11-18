@@ -21,7 +21,7 @@ describe('Card List details component', () => {
     expect(app).not.toBeNull();
   });
 
-  it('Verify that the component renders the specified number of cards. Test 1.', async () => {
+  it('Verify that the component renders the specified number of cards.', async () => {
     render(<App />);
 
     // Now we check the amount of cards after a switch from 4 to 10 per page
