@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { setupStore } from '../Store';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { searchSlice } from '../Reducers/SearchReducer';
+import { useEffect } from 'react';
 
 const TEST_ID = 'testID';
 const TEST_STRING = 'abracadabra';
@@ -24,7 +25,10 @@ const TestComponent = function () {
   const { setRootSearch } = searchSlice.actions;
   const dispatch = useAppDispatch();
 
-  dispatch(setRootSearch(TEST_STRING));
+  useEffect(() => {
+    dispatch(setRootSearch(TEST_STRING));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return <div data-testid={TEST_ID}>{searchRootString}</div>;
 };

@@ -69,10 +69,6 @@ const ItemList = function () {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNumber, searchRootString, perPage]);
 
-  useEffect(() => {
-    console.log('isFetching - ', isFetching);
-  }, [isFetching]);
-
   async function prevPage(): Promise<void> {
     if (pageNumber - 1 >= 1) {
       if (searchRootString) {
