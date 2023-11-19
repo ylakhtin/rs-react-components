@@ -1,11 +1,5 @@
-import {
-  BEERS,
-  BEER_NAME,
-  PAGE_NUMBER,
-  PER_PAGE,
-  ROOT_ENDPOINT,
-} from '../../../shared/data/data';
-import { buildQueryString } from '../API';
+import { BEERS, BEER_NAME, PAGE_NUMBER, PER_PAGE, ROOT_ENDPOINT } from '../../../shared/data/data';
+import { buildQueryString } from '../StringBuilder';
 
 describe('API tests', () => {
   it('Tests query string build', () => {
@@ -23,24 +17,11 @@ describe('API tests', () => {
       testSearchString.trim();
 
     const expectedQueryStringNoSearch =
-      ROOT_ENDPOINT +
-      BEERS +
-      PAGE_NUMBER +
-      testPageNumber +
-      PER_PAGE +
-      testPerPage;
+      ROOT_ENDPOINT + BEERS + PAGE_NUMBER + testPageNumber + PER_PAGE + testPerPage;
 
-    const queryStringWithSearch = buildQueryString(
-      testSearchString,
-      testPageNumber,
-      testPerPage
-    );
+    const queryStringWithSearch = buildQueryString(testSearchString, testPageNumber, testPerPage);
 
-    const queryStringNoSearch = buildQueryString(
-      '',
-      testPageNumber,
-      testPerPage
-    );
+    const queryStringNoSearch = buildQueryString('', testPageNumber, testPerPage);
 
     expect(queryStringWithSearch).toEqual(expectedQueryStringWithSearch);
     expect(queryStringNoSearch).toEqual(expectedQueryStringNoSearch);

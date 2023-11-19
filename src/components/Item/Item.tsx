@@ -1,8 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import classes from './Item.module.css';
-import { IBeerDetails, IGeneralContext } from '../../shared/data/data';
-import { useContext } from 'react';
-import { GeneralContext } from '../MainLayout/MainLayout';
+import { IBeerDetails } from '../../shared/data/data';
+import { useAppSelector } from '../../utils/hooks/reduxHooks';
 
 const Item = function (props: {
   setRightSectionState: () => void;
@@ -11,13 +10,13 @@ const Item = function (props: {
   sectionOpen: boolean;
   id: number;
 }) {
-  const genContext: IGeneralContext | null = useContext(GeneralContext);
+  const searchRootString = useAppSelector((state) => state.searchSliceReducer.searchRootString);
 
   function getURL(): string {
     let url = '/page/' + props.pageNumber;
 
-    if (genContext?.mainString) {
-      url += '/search/' + genContext?.mainString;
+    if (searchRootString) {
+      url += '/search/' + searchRootString;
     }
 
     if (!props.sectionOpen) {
@@ -29,11 +28,7 @@ const Item = function (props: {
 
   return (
     <NavLink to={getURL()} key={props.id}>
-      <div
-        className={classes.flexContainer}
-        key={props.id}
-        onClick={props.setRightSectionState}
-      >
+      <div className={classes.flexContainer} key={props.id} onClick={props.setRightSectionState}>
         <div className={classes.imageContainer}>
           <img
             className={classes.itemImage}

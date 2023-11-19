@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { AppRoutes } from '../../../App';
 import { MemoryRouter } from 'react-router-dom';
-import { server } from '../../MockService/Server';
+import { server } from '../../../utils/MockService/Server';
 
 const wrongPath = '/abracadabra';
 

@@ -1,26 +1,29 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import classes from './Paginator.module.css';
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_ITEMS_PER_PAGE,
   ITEMS_PER_PAGE,
-  IGeneralContext,
 } from '../../shared/data/data';
-import { GeneralContext } from '../MainLayout/MainLayout';
+import { useAppDispatch, useAppSelector } from '../../utils/hooks/reduxHooks';
+import { perPageSlice } from '../../utils/Store/Reducers/PerPageReducer';
 
 function Paginator(props: {
   prevPage: () => void;
   nextPage: () => void;
   setPageNum: React.Dispatch<React.SetStateAction<number>>;
-  setPerPage: React.Dispatch<React.SetStateAction<number>>;
-  perPage: number;
   pageNumber: number;
   isLoading: boolean;
 }) {
   const [page, setPage] = useState(props.pageNumber);
   const navigate = useNavigate();
-  const genContext: IGeneralContext | null = useContext(GeneralContext);
+  const searchRootString = useAppSelector((state) => state.searchSliceReducer.searchRootString);
+  const perPage = useAppSelector((state) => state.perPageReducer.perPage);
+
+  const { setPerPage } = perPageSlice.actions;
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setPage(props.pageNumber);
@@ -29,7 +32,7 @@ function Paginator(props: {
   function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>): void {
     if (event.key === 'Enter') {
       props.setPageNum(page);
-      doNavigate(genContext?.mainString, page);
+      doNavigate(searchRootString, page);
     }
   }
 
@@ -42,8 +45,8 @@ function Paginator(props: {
   }
 
   function setItemsPerPage(event: React.ChangeEvent<HTMLSelectElement>): void {
-    props.setPerPage(Number(event.target.value));
-    doNavigate(genContext?.mainString, DEFAULT_PAGE_NUMBER);
+    dispatch(setPerPage(Number(event.target.value)));
+    doNavigate(searchRootString, DEFAULT_PAGE_NUMBER);
   }
 
   return (
@@ -64,18 +67,12 @@ function Paginator(props: {
           <div className={classes.itemsPerPage}>
             <span>Items amount: </span>
             <select name="perPage" id="itemsPerPage" onChange={setItemsPerPage}>
-              <option value={props.perPage}>{props.perPage} per page</option>
+              <option value={perPage}>{perPage} per page</option>
               <option
-                value={
-                  props.perPage === DEFAULT_ITEMS_PER_PAGE
-                    ? ITEMS_PER_PAGE
-                    : DEFAULT_ITEMS_PER_PAGE
-                }
+                value={perPage === DEFAULT_ITEMS_PER_PAGE ? ITEMS_PER_PAGE : DEFAULT_ITEMS_PER_PAGE}
               >
-                {props.perPage === DEFAULT_ITEMS_PER_PAGE
-                  ? ITEMS_PER_PAGE
-                  : DEFAULT_ITEMS_PER_PAGE}{' '}
-                per page
+                {perPage === DEFAULT_ITEMS_PER_PAGE ? ITEMS_PER_PAGE : DEFAULT_ITEMS_PER_PAGE} per
+                page
               </option>
             </select>
           </div>

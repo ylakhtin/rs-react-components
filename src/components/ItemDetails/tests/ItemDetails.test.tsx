@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { App } from '../../../App';
-import { server } from '../../MockService/Server';
+import { server } from '../../../utils/MockService/Server';
 import { beerDetails } from '../../../shared/data/testData';
 
 describe('Card details component', () => {

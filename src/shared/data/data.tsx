@@ -63,13 +63,6 @@ export interface IBeerDetails {
   contributed_by: string;
 }
 
-export interface IGeneralContext {
-  mainString: string;
-  setMainString: React.Dispatch<React.SetStateAction<string>>;
-  beerList: IBeerDetails[];
-  setBeerList: React.Dispatch<React.SetStateAction<IBeerDetails[]>>;
-}
-
 export {
   EMPTY_ITEMS_ARRAY,
   ROOT_ENDPOINT,

@@ -113,11 +113,7 @@ const beerDetails = {
     ],
     yeast: 'Wyeast 1056 - American Ale™',
   },
-  food_pairing: [
-    'Spicy chicken tikka masala',
-    'Grilled chicken quesadilla',
-    'Caramel toffee cake',
-  ],
+  food_pairing: ['Spicy chicken tikka masala', 'Grilled chicken quesadilla', 'Caramel toffee cake'],
   brewers_tips:
     'The earthy and floral aromas from the hops can be overpowering. Drop a little Cascade in at the end of the boil to lift the profile with a bit of citrus.',
   contributed_by: 'Sam Mason <samjbmason>',
@@ -368,8 +364,7 @@ const firstPage = [
     name: 'Berliner Weisse With Yuzu - B-Sides',
     tagline: 'Japanese Citrus Berliner Weisse.',
     first_brewed: '11/2015',
-    description:
-      'Japanese citrus fruit intensifies the sour nature of this German classic.',
+    description: 'Japanese citrus fruit intensifies the sour nature of this German classic.',
     image_url: 'https://images.punkapi.com/v2/keg.png',
     abv: 4.2,
     ibu: 8,
@@ -472,8 +467,7 @@ const firstPage = [
       yeast: 'Wyeast 1056 - American Ale™',
     },
     food_pairing: ['Smoked chicken wings', 'Miso ramen', 'Yuzu cheesecake'],
-    brewers_tips:
-      'Clean everything twice. All you want is the clean sourness of lactobacillus.',
+    brewers_tips: 'Clean everything twice. All you want is the clean sourness of lactobacillus.',
     contributed_by: 'Sam Mason <samjbmason>',
   },
   {
@@ -864,8 +858,7 @@ const firstPageTen = [
     name: 'Berliner Weisse With Yuzu - B-Sides',
     tagline: 'Japanese Citrus Berliner Weisse.',
     first_brewed: '11/2015',
-    description:
-      'Japanese citrus fruit intensifies the sour nature of this German classic.',
+    description: 'Japanese citrus fruit intensifies the sour nature of this German classic.',
     image_url: 'https://images.punkapi.com/v2/keg.png',
     abv: 4.2,
     ibu: 8,
@@ -968,8 +961,7 @@ const firstPageTen = [
       yeast: 'Wyeast 1056 - American Ale™',
     },
     food_pairing: ['Smoked chicken wings', 'Miso ramen', 'Yuzu cheesecake'],
-    brewers_tips:
-      'Clean everything twice. All you want is the clean sourness of lactobacillus.',
+    brewers_tips: 'Clean everything twice. All you want is the clean sourness of lactobacillus.',
     contributed_by: 'Sam Mason <samjbmason>',
   },
   {
@@ -1384,8 +1376,7 @@ const firstPageTen = [
           unit: 'celsius',
         },
       },
-      twist:
-        'Aged in whisky barrels with raspberries, tayberries and blackberries',
+      twist: 'Aged in whisky barrels with raspberries, tayberries and blackberries',
     },
     ingredients: {
       malt: [
@@ -1783,11 +1774,7 @@ const firstPageTen = [
       ],
       yeast: 'Saflager S189',
     },
-    food_pairing: [
-      'Kedgeree',
-      'Scotch broth with sourdough bread',
-      'Clootie dumpling',
-    ],
+    food_pairing: ['Kedgeree', 'Scotch broth with sourdough bread', 'Clootie dumpling'],
     brewers_tips:
       'Authentic heather honey adds a beautiful floral top note that is unachievable any other way.',
     contributed_by: 'Sam Mason <samjbmason>',
@@ -2163,8 +2150,7 @@ const secondPage = [
           unit: 'celsius',
         },
       },
-      twist:
-        'Aged in whisky barrels with raspberries, tayberries and blackberries',
+      twist: 'Aged in whisky barrels with raspberries, tayberries and blackberries',
     },
     ingredients: {
       malt: [
@@ -2564,11 +2550,7 @@ const thirdPage = [
       ],
       yeast: 'Saflager S189',
     },
-    food_pairing: [
-      'Kedgeree',
-      'Scotch broth with sourdough bread',
-      'Clootie dumpling',
-    ],
+    food_pairing: ['Kedgeree', 'Scotch broth with sourdough bread', 'Clootie dumpling'],
     brewers_tips:
       'Authentic heather honey adds a beautiful floral top note that is unachievable any other way.',
     contributed_by: 'Sam Mason <samjbmason>',
