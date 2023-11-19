@@ -105,9 +105,9 @@ const ItemList = function () {
           <Matches listLength={data ? (data.length as number) : 0} requestOK={!error} />
           <div className={classes.filler}>
             {error ? (
-              <div className={classes.loader}>Bad request</div>
+              <div>Bad request</div>
             ) : (
-              <div>
+              <div className={classes.content}>
                 {isFetching && <Loader />}
                 {!isFetching &&
                   data?.map((beer, index) => (
