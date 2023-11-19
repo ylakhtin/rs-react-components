@@ -20,7 +20,6 @@ function Paginator(props: {
   const navigate = useNavigate();
   const searchRootString = useAppSelector((state) => state.searchSliceReducer.searchRootString);
   const perPage = useAppSelector((state) => state.perPageReducer.perPage);
-  // const isLoading = useAppSelector((state) => state.isLoadingReducer.isLoading);
 
   const { setPerPage } = perPageSlice.actions;
 
@@ -52,7 +51,7 @@ function Paginator(props: {
 
   return (
     <div>
-      {!props.isLoading ? (
+      {!props.isLoading && (
         <div className={classes.mainContainer}>
           <div className={classes.container}>
             <button onClick={props.prevPage}>Prev</button>
@@ -78,8 +77,6 @@ function Paginator(props: {
             </select>
           </div>
         </div>
-      ) : (
-        <></>
       )}
     </div>
   );
