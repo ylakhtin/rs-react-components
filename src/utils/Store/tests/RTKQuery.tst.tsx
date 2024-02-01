@@ -7,7 +7,7 @@ import { server } from '../../MockService/Server';
 const TEST_QUERY_STRING = 'https://api.punkapi.com/v2/beers?page=1&per_page=4';
 const TEST_ID = 'testID';
 const ERROR_STRING = 'error occurred';
-const SUCCESS_STRING = 'Request Success'
+const SUCCESS_STRING = 'Request Success';
 
 const MockComponent = function () {
   const store = setupStore();
