@@ -11,7 +11,7 @@ import { itemLoadingSlice } from '../../utils/Store/Reducers/ItemDetailLoadReduc
 const ItemDetails = function () {
   const { index } = useParams();
   const { data, isFetching } = beerAPI.useFetchDataQuery(SINGLE_BEER + index);
-  const { setDetailsOpen } = detailsOpenSlice.actions;
+  const { setDetailsOpen } = detailsOpenSlice.actions         ;
   const { setItemLoading } = itemLoadingSlice.actions;
   const dispatch = useAppDispatch();
 
