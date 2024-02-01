@@ -1,30 +1,21 @@
-import { useState, useEffect, createContext, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import classes from './ItemList.module.css';
 import Paginator from '../Paginator/Paginator';
 import Loader from '../Loader/Loader';
-import { queryItems } from '../API/API';
-import {
-  SEARCH_DEFAULT,
-  MAX_AMOUNT,
-  DEFAULT_PAGE_NUMBER,
-  DEFAULT_ITEMS_PER_PAGE,
-  IGeneralContext,
-} from '../../shared/data/data';
+import { buildQueryString } from '../../utils/StringBuilder/StringBuilder';
+import { SEARCH_DEFAULT, MAX_AMOUNT, DEFAULT_PAGE_NUMBER } from '../../shared/data/data';
 import Item from '../Item/Item';
 import Matches from '../Matches/Matches';
-import { GeneralContext } from '../MainLayout/MainLayout';
-
-export const DataFromChildContext = createContext<React.Dispatch<
-  React.SetStateAction<boolean>
-> | null>(null);
+import { useAppDispatch, useAppSelector } from '../../utils/hooks/reduxHooks';
+import { searchSlice } from '../../utils/Store/Reducers/SearchReducer';
+import { itemListSlice } from '../../utils/Store/Reducers/ItemListReducer';
+import { detailsOpenSlice } from '../../utils/Store/Reducers/ItemDetailsReducer';
+import { beerAPI } from '../../utils/services/BeerService';
+import { listLoadingSlice } from '../../utils/Store/Reducers/ListLoadReducer';
 
 const ItemList = function () {
-  const [isLoading, setIsLoading] = useState(false);
-  const [requestOK, setRequestOK] = useState(true);
-  const [sectionOpen, setSectionOpen] = useState(false);
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
-  const [perPage, setPerPage] = useState(DEFAULT_ITEMS_PER_PAGE);
 
   const navigate = useNavigate();
 
@@ -34,43 +25,54 @@ const ItemList = function () {
     index,
   } = useParams();
 
-  const genContext: IGeneralContext | null = useContext(GeneralContext);
+  const searchRootString = useAppSelector((state) => state.searchSliceReducer.searchRootString);
+
+  const sectionOpen = useAppSelector((state) => state.itemDetailsReducer.sectionOpen);
+  const perPage = useAppSelector((state) => state.perPageReducer.perPage);
+
+  const { setDetailsOpen } = detailsOpenSlice.actions;
+  const { setItemList } = itemListSlice.actions;
+  const { setRootSearch } = searchSlice.actions;
+  const { setListLoading } = listLoadingSlice.actions;
+
+  const dispatch = useAppDispatch();
+  const [queryString, setQueryString] = useState(
+    buildQueryString(searchRootString, pageNumber, perPage)
+  );
+
+  const { data, error, isLoading, isFetching } = beerAPI.useFetchDataQuery(queryString);
+
+  useEffect(() => {
+    dispatch(setListLoading(isFetching));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFetching]);
 
   useEffect(() => {
     if (searchStr) {
-      genContext?.setMainString(searchStr);
+      dispatch(setRootSearch(searchStr));
     } else {
-      genContext?.setMainString('');
+      dispatch(setRootSearch(''));
     }
     if (pageNum) {
       setPageNumber(Number(pageNum));
     }
-  }, [genContext, pageNum, searchStr]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchRootString, pageNum, searchStr]);
 
   useEffect(() => {
-    (async () => {
-      setIsLoading(true);
+    setQueryString(buildQueryString(searchRootString, pageNumber, perPage));
 
-      const [requestOKCandidate, beerListCandidate] = await queryItems(
-        genContext?.mainString as string,
-        pageNumber,
-        perPage
-      );
+    if (Array.isArray(data)) {
+      dispatch(setItemList(data));
+    }
 
-      setRequestOK(requestOKCandidate);
-      if (Array.isArray(beerListCandidate)) {
-        genContext?.setBeerList(beerListCandidate);
-      }
-
-      setIsLoading(false);
-    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageNumber, genContext?.mainString, perPage]);
+  }, [pageNumber, searchRootString, perPage]);
 
   async function prevPage(): Promise<void> {
     if (pageNumber - 1 >= 1) {
-      if (genContext?.mainString) {
-        navigate(`/page/${pageNumber - 1}/search/${genContext?.mainString}`);
+      if (searchRootString) {
+        navigate(`/page/${pageNumber - 1}/search/${searchRootString}`);
       } else {
         navigate(`/page/${pageNumber - 1}`);
       }
@@ -80,8 +82,8 @@ const ItemList = function () {
   async function nextPage(): Promise<void> {
     const limit = Math.ceil(MAX_AMOUNT / perPage);
     if (pageNumber + 1 <= limit) {
-      if (genContext?.mainString) {
-        navigate(`/page/${pageNumber + 1}/search/${genContext?.mainString}`);
+      if (searchRootString) {
+        navigate(`/page/${pageNumber + 1}/search/${searchRootString}`);
       } else {
         navigate(`/page/${pageNumber + 1}`);
       }
@@ -90,9 +92,9 @@ const ItemList = function () {
 
   function setRightSectionState() {
     if (!index) {
-      setSectionOpen(true);
+      dispatch(setDetailsOpen(true));
     } else {
-      setSectionOpen(false);
+      dispatch(setDetailsOpen(false));
     }
   }
 
@@ -100,43 +102,34 @@ const ItemList = function () {
     <div className={classes.mainContainer}>
       <div className={classes.container}>
         <div className={classes.wrapper}>
-          <Matches
-            listLength={genContext?.beerList.length as number}
-            requestOK={requestOK}
-          />
+          <Matches listLength={data ? (data.length as number) : 0} requestOK={!error} />
           <div className={classes.filler}>
-            {requestOK ? (
-              <div>
-                {isLoading ? (
-                  <Loader />
-                ) : (
-                  genContext?.beerList.map((beer, index) => (
+            {error ? (
+              <div>Bad request</div>
+            ) : (
+              <div className={classes.content}>
+                {isFetching && <Loader />}
+                {!isFetching &&
+                  data?.map((beer, index) => (
                     <Item
                       setRightSectionState={setRightSectionState}
                       beer={beer}
                       pageNumber={pageNumber}
                       sectionOpen={sectionOpen}
-                      id={genContext?.beerList[index].id}
-                      key={genContext?.beerList[index].id}
+                      id={data[index].id}
+                      key={data[index].id}
                     />
-                  ))
-                )}
+                  ))}
               </div>
-            ) : (
-              <div className={classes.loader}>Bad request</div>
             )}
           </div>
         </div>
-        <DataFromChildContext.Provider value={setSectionOpen}>
-          <Outlet />
-        </DataFromChildContext.Provider>
+        <Outlet />
       </div>
       <Paginator
         prevPage={prevPage}
         nextPage={nextPage}
         setPageNum={setPageNumber}
-        setPerPage={setPerPage}
-        perPage={perPage}
         pageNumber={pageNumber}
         isLoading={isLoading}
       />

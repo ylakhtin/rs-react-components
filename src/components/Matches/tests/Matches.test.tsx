@@ -15,10 +15,7 @@ const wrongPayload = {
 describe('Matches component', () => {
   it('Tests the "Number of matches" block. Positive case.', async () => {
     await render(
-      <Matches
-        listLength={correctPayload.listLength}
-        requestOK={correctPayload.requestOK}
-      />
+      <Matches listLength={correctPayload.listLength} requestOK={correctPayload.requestOK} />
     );
     const matches = screen.getByText(/Matches on this page: /i);
     expect(matches).toBeInTheDocument();
@@ -26,10 +23,7 @@ describe('Matches component', () => {
 
   it('Tests the "Check that an appropriate message is displayed if no cards are present', async () => {
     await render(
-      <Matches
-        listLength={wrongPayload.listLength}
-        requestOK={wrongPayload.requestOK}
-      />
+      <Matches listLength={wrongPayload.listLength} requestOK={wrongPayload.requestOK} />
     );
     const matches = screen.getByText(/No matches found/i);
     expect(matches).toBeInTheDocument();

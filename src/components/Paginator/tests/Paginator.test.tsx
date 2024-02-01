@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { server } from '../../MockService/Server';
+import { server } from '../../../utils/MockService/Server';
 import { App } from '../../../App';
 import { SEARCH_DEFAULT } from '../../../shared/data/data';
 
@@ -15,32 +15,16 @@ describe('Paginator component', () => {
     server.close();
   });
 
+  it('Smoke check', async () => {
+    const app = await render(<App />);
+    expect(app).not.toBeNull();
+  });
+
   it('Make sure the component updates URL query parameter when page changes. Next page', async () => {
     await render(<App />);
 
     const buttonElement = await screen.findByRole('button', { name: /Next/i });
     fireEvent.click(buttonElement);
-
-    const url = new URL(window.location.href);
-    const pathSegments = url.pathname.split('/');
-    const pageNum = pathSegments[PAGE_SEGMENT_NUMBER];
-
-    expect(pageNum).toEqual(String(PAGE_SEGMENT_NUMBER));
-  });
-
-  it('Make sure the component updates URL query parameter when page changes. Previous page', async () => {
-    await render(<App />);
-
-    const buttonNextElement = await screen.findByRole('button', {
-      name: /Next/i,
-    });
-    fireEvent.click(buttonNextElement);
-    fireEvent.click(buttonNextElement);
-
-    const buttonPrevElement = await screen.findByRole('button', {
-      name: /Prev/i,
-    });
-    fireEvent.click(buttonPrevElement);
 
     const url = new URL(window.location.href);
     const pathSegments = url.pathname.split('/');

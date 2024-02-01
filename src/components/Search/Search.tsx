@@ -1,20 +1,16 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import classes from './Search.module.css';
 import Logo from '../Logo/Logo';
-import {
-  IGeneralContext,
-  SEARCH_DEFAULT,
-  SEARCH_PLACEHOLDER_TEXT,
-} from '../../shared/data/data';
-import { GeneralContext } from '../MainLayout/MainLayout';
+import { SEARCH_DEFAULT, SEARCH_PLACEHOLDER_TEXT } from '../../shared/data/data';
+import { useAppDispatch } from '../../utils/hooks/reduxHooks';
+import { searchSlice } from '../../utils/Store/Reducers/SearchReducer';
 
 const Search = function () {
-  const [inputValue, setInputValue] = useState(
-    localStorage.getItem(SEARCH_DEFAULT) || ''
-  );
+  const [inputValue, setInputValue] = useState(localStorage.getItem(SEARCH_DEFAULT) || '');
 
-  const genContext: IGeneralContext | null = useContext(GeneralContext);
+  const { setRootSearch } = searchSlice.actions;
+  const dispatch = useAppDispatch();
 
   function setValue(searchString: string) {
     setInputValue(searchString);
@@ -22,9 +18,7 @@ const Search = function () {
 
   function setSearchStringInApp() {
     localStorage.setItem(SEARCH_DEFAULT, inputValue);
-    if (genContext) {
-      genContext.setMainString(inputValue);
-    }
+    dispatch(setRootSearch(inputValue));
   }
 
   return (
@@ -37,10 +31,7 @@ const Search = function () {
         className={classes.searchInput}
         placeholder={SEARCH_PLACEHOLDER_TEXT}
       />
-      <NavLink
-        to={inputValue ? `/page/1/search/${inputValue}` : '/page/1'}
-        key={inputValue}
-      >
+      <NavLink to={inputValue ? `/page/1/search/${inputValue}` : '/page/1'} key={inputValue}>
         <button onClick={setSearchStringInApp} className={classes.searchButton}>
           Search
         </button>
